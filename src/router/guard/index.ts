@@ -13,6 +13,10 @@ import nProgress from 'nprogress';
 import projectSetting from '/@/settings/projectSetting';
 import { createParamMenuGuard } from './paramMenuGuard';
 
+/**
+ * guard:保护;警卫;看守;后卫;保卫;(统
+ * @param router
+ */
 // Don't change the order of creation
 export function setupRouterGuard(router: Router) {
   createPageGuard(router);

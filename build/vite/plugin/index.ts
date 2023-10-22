@@ -1,13 +1,22 @@
 import { PluginOption } from 'vite';
 import vue from '@vitejs/plugin-vue';
+/**
+ * @vitejs/plugin-vue-jsx是Vite官方提供的JSX支持插件，其内部使用了Vue官方提供的@vue/babel-plugin-jsx插件。
+ */
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import legacy from '@vitejs/plugin-legacy';
 import purgeIcons from 'vite-plugin-purge-icons';
 import UnoCSS from 'unocss/vite';
 import { presetTypography, presetUno } from 'unocss';
 
+/**
+ * 有时候需要用到一些音视频接口等需要https才能拿到权限，为方便开发过程中调试，本次用到的插件是 mkcert的vite版本： vite-plugin-mkcert
+ */
 import VitePluginCertificate from 'vite-plugin-mkcert';
 //[issues/555]开发环境，vscode断点调试，文件或行数对不上
+/**
+ * note: Vue3 setup 语法糖下如何定义组件名称,使用下面的插件，支持在script上定义组件名称
+ */
 import vueSetupExtend from 'vite-plugin-vue-setup-extend-plus';
 import { configHtmlPlugin } from './html';
 import { configMockPlugin } from './mock';

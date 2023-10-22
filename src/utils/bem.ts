@@ -1,5 +1,9 @@
 import { prefixCls } from '/@/settings/designSetting';
 
+/**
+ * 字符串索引签名： [prop:string]:Type
+ * 数值索引签名： [prop:number]:Type
+ */
 type Mod = string | { [key: string]: any };
 type Mods = Mod | Mod[];
 

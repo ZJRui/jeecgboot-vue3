@@ -9,6 +9,11 @@ export function generateModifyVars(dark = false) {
   const palettes = generateAntColors(primaryColor);
   const primary = palettes[5];
 
+  /**
+   * Record 该工具类型能够使用给定的对象属性名类型和对象属性类型创建
+   * 一个新的对象类型。“Record<K, T>”工具类型中的类型参数K提供了
+   * 对象属性名联合类型，类型参数T提供了对象属性的类型。
+   */
   const primaryColorObj: Record<string, string> = {};
 
   for (let index = 0; index < 10; index++) {

@@ -24,6 +24,7 @@ export function usePermission() {
   const permissionStore = usePermissionStore();
   //动态加载流程节点表单权限
   let formData: any = {};
+  //注入流程节点表单权限
   function initBpmFormData(_bpmFormData) {
     formData = _bpmFormData;
   }
@@ -87,6 +88,14 @@ export function usePermission() {
       if (!isArray(value)) {
         return userStore.getRoleList?.includes(value as RoleEnum);
       }
+      /**
+       * _.intersection 是 Lodash 函数库中的一个函数，用于找到两个或多个数组中共同存在的元素，并返回一个新的数组，
+       * 该数组包含这些共同元素。在 TypeScript 中，_.intersection 的类型定义通常是一个泛型函数，接受多个数组作为参数，并
+       * 返回一个新数组，其中包含输入数组中的交集元素。
+       *Lodash 中的交集计算是基于值的，它会比较数组中的元素值，找到在所有输入数组中都存在的元素，然后将这些元素组成新的数组返回。
+       *
+       *  intersection: 交叉;相交;交点;
+       */
       return (intersection(value, userStore.getRoleList) as RoleEnum[]).length > 0;
     }
 

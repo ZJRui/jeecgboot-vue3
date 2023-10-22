@@ -235,6 +235,7 @@ const linkRoute = {
   ],
 };
 
+// @ts-ignore
 export default [
   {
     url: `${baseUrl}/sys/permission/getUserPermissionByToken`,

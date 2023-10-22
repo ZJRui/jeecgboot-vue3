@@ -15,6 +15,12 @@ import { MULTIPLE_TABS_KEY } from '/@/enums/cacheEnum';
 import projectSetting from '/@/settings/projectSetting';
 import { useUserStore } from '/@/store/modules/user';
 
+/**
+ *
+ * RouteLocationNormalized是vue-router4中的一个核心接口，他用于白哦是路由的规范化信息。
+ * 在vuerouter中，路由规范话是指将传入的路由信息转换为一种标准化的格式，以便更容易处理和比较路由信息。
+ * 这个接口通常在路由导航守卫、路由钩子函数等地方使用，提供了访问当前路由信息的方法。
+ */
 export interface MultipleTabState {
   cacheTabList: Set<string>;
   tabList: RouteLocationNormalized[];

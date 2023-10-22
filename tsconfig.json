@@ -14,11 +14,15 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": true,// 检查未使用的参数
     "experimentalDecorators": true,
     "lib": ["dom", "esnext"],
     "types": ["vite/client", "jest"],
-    "typeRoots": ["./node_modules/@types/", "./types"],
+    //“--typeRoots”编译选项用来设置声明文件的根目录。当配置了
+    //“--typeRoots”编译选项时，只有该选项指定的目录下的声明文件会
+    //被添加到编译文件列表，而“node_modules/@types”目录下的声明文
+    //件将不再被默认添加到编译文件列表
+    "typeRoots": ["./node_modules/@types/", "./types"],//《入门与实现》
     "noImplicitAny": false,
     "skipLibCheck": true,
     "paths": {

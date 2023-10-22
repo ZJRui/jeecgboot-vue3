@@ -1,25 +1,8 @@
 <script lang="tsx">
   import type { CSSProperties } from 'vue';
-  import type {
-    FieldNames,
-    TreeState,
-    TreeItem,
-    KeyType,
-    CheckKeys,
-    TreeActionType,
-  } from './types/tree';
+  import type { FieldNames, TreeState, TreeItem, KeyType, CheckKeys, TreeActionType } from './types/tree';
 
-  import {
-    defineComponent,
-    reactive,
-    computed,
-    unref,
-    ref,
-    watchEffect,
-    toRaw,
-    watch,
-    onMounted,
-  } from 'vue';
+  import { defineComponent, reactive, computed, unref, ref, watchEffect, toRaw, watch, onMounted } from 'vue';
   import TreeHeader from './components/TreeHeader.vue';
   import { Tree, Spin, Empty } from 'ant-design-vue';
   import { TreeIcon } from './TreeIcon';
@@ -90,13 +73,13 @@
           onCheck: (v: CheckKeys, e) => {
             let currentValue = toRaw(state.checkedKeys) as KeyType[];
             if (isArray(currentValue) && searchState.startSearch) {
-             //update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效--- 
+              //update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效---
               const value = e.node.eventKey;
               currentValue = difference(currentValue, getChildrenKeys(value));
               if (e.checked) {
-                  currentValue.push(value);
+                currentValue.push(value);
               }
-             //update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效---
+              //update-begin-author:liusq---date:20230404--for: [issue/429]树搜索点击事件失效---
               state.checkedKeys = currentValue;
             } else {
               state.checkedKeys = v;
@@ -111,9 +94,7 @@
         return omit(propsData, 'treeData', 'class');
       });
 
-      const getTreeData = computed((): TreeItem[] =>
-        searchState.startSearch ? searchState.searchData : unref(treeDataRef),
-      );
+      const getTreeData = computed((): TreeItem[] => (searchState.startSearch ? searchState.searchData : unref(treeDataRef)));
 
       const getNotFound = computed((): boolean => {
         return !getTreeData.value || getTreeData.value.length === 0;
@@ -203,7 +184,7 @@
         },
         {
           immediate: true,
-        },
+        }
       );
 
       watch(
@@ -212,7 +193,7 @@
           if (val) {
             handleSearch(searchState.searchText);
           }
-        },
+        }
       );
 
       function handleSearch(searchValue: string) {
@@ -222,8 +203,7 @@
           searchState.startSearch = false;
           return;
         }
-        const { filterFn, checkable, expandOnSearch, checkOnSearch, selectedOnSearch } =
-          unref(props);
+        const { filterFn, checkable, expandOnSearch, checkOnSearch, selectedOnSearch } = unref(props);
         searchState.startSearch = true;
         const { title: titleField, key: keyField } = unref(getFieldNames);
 
@@ -231,15 +211,13 @@
         searchState.searchData = filter(
           unref(treeDataRef),
           (node) => {
-            const result = filterFn
-              ? filterFn(searchValue, node, unref(getFieldNames))
-              : node[titleField]?.includes(searchValue) ?? false;
+            const result = filterFn ? filterFn(searchValue, node, unref(getFieldNames)) : node[titleField]?.includes(searchValue) ?? false;
             if (result) {
               matchedKeys.push(node[keyField]);
             }
             return result;
           },
-          unref(getFieldNames),
+          unref(getFieldNames)
         );
 
         if (expandOnSearch) {
@@ -304,7 +282,7 @@
         () => {
           state.checkedKeys = toRaw(props.value || []);
         },
-        { immediate: true },
+        { immediate: true }
       );
 
       watch(
@@ -313,7 +291,7 @@
           const v = toRaw(state.checkedKeys);
           emit('update:value', v);
           emit('change', v);
-        },
+        }
       );
 
       watchEffect(() => {
@@ -371,18 +349,13 @@
         eachTree(data, (item, _parent) => {
           const searchText = searchState.searchText;
           const { highlight } = unref(props);
-          const {
-            title: titleField,
-            key: keyField,
-            children: childrenField,
-          } = unref(getFieldNames);
+          const { title: titleField, key: keyField, children: childrenField } = unref(getFieldNames);
 
           const icon = getIcon(item, item.icon);
           const title = get(item, titleField);
 
           const searchIdx = searchText ? title.indexOf(searchText) : -1;
-          const isHighlight =
-            searchState.startSearch && !isEmpty(searchText) && highlight && searchIdx !== -1;
+          const isHighlight = searchState.startSearch && !isEmpty(searchText) && highlight && searchIdx !== -1;
           const highlightStyle = `color: ${isBoolean(highlight) ? '#f50' : highlight}`;
 
           const titleDom = isHighlight ? (
@@ -395,10 +368,7 @@
             title
           );
           item[titleField] = (
-            <span
-              class={`${bem('title')} pl-2`}
-              onClick={handleClickNode.bind(null, item[keyField], item[childrenField])}
-            >
+            <span class={`${bem('title')} pl-2`} onClick={handleClickNode.bind(null, item[keyField], item[childrenField])}>
               {slots?.title ? (
                 getSlot(slots, 'title', item)
               ) : (
@@ -444,11 +414,7 @@
               <ScrollContainer style={scrollStyle} v-show={!unref(getNotFound)}>
                 <Tree {...unref(getBindValues)} showIcon={false} treeData={treeData.value} />
               </ScrollContainer>
-              <Empty
-                v-show={unref(getNotFound)}
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                class="!mt-4"
-              />
+              <Empty v-show={unref(getNotFound)} image={Empty.PRESENTED_IMAGE_SIMPLE} class="!mt-4" />
             </Spin>
           </div>
         );

@@ -1,6 +1,10 @@
+/**
+ * 针对类型的导入到处语法
+ */
 import type { UserConfig, ConfigEnv } from 'vite';
 import pkg from './package.json';
 import dayjs from 'dayjs';
+
 import { loadEnv } from 'vite';
 import { resolve } from 'path';
 import { generateModifyVars } from './build/generate/generateModifyVars';
@@ -18,10 +22,27 @@ const __APP_INFO__ = {
   pkg: { dependencies, devDependencies, name, version },
   lastBuildTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
 };
-
+/**
+ * vite.config.js 中的配置可以是几种形式
+ * 1.导出对象  export default {}
+ * 2.工具函数接收对象配置
+ * export default defineConfig({})
+ * 3.工具函数接收函数作为参数
+ * export default defineConfig(()=>{})
+ * 4.导出一个函数，该函数的返回值类型是UserConfig , let a=():object=>{return {}}
+ *
+ * @param command
+ * @param mode
+ */
 export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
 
+  /**
+   * 在配置中使用环境变量
+   * 环境变量通常可以从 process.env获得。
+   * 注意Vite默认是不加载.env文件的，因为这些文件需要在执行完 Vite配置后才能确定加载哪一个，举个例子，
+   * root和envDir选项会影响加载行为。不过当你的确需要时，你可以使用loadEnv函数来加载指定的.env文件。
+   */
   const env = loadEnv(mode, root);
 
   // The boolean type read by loadEnv is a string. This function can be converted to boolean type
@@ -50,6 +71,14 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           find: /\/#\//,
           replacement: pathResolve('types') + '/',
         },
+        //配置 针对 /@/和@/都做替换
+        // /\/@\//  和  /@\//的区别
+        // /\/@\//： 这是一个正则表达式，用来匹配字符串中的 /@/。由于斜杠 / 在正则表达式中是特殊字符，因此在正则表达式中匹配斜杠本身时，
+        // 需要使用反斜杠进行转义。所以，\/ 表示匹配一个斜杠字符。此正则表达式可以匹配字符串中的 /@/，例如 /@/。
+        //
+        // /@\//： 这是一个正则表达式，用来匹配字符串中的 @/。在这个正则表达式中，斜杠 / 不需要转义，因为它没有特殊含义。这个正则表达式会匹配字符串中的 @/，例如 @/。
+        //
+        // 所以，区别在于第一个正则表达式需要转义斜杠，而第二个正则表达式中的斜杠不需要转义。根据你的需求，选择合适的正则表达式来匹配字符串
         {
           find: /@\//,
           replacement: pathResolve('src') + '/',
@@ -82,8 +111,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           manualChunks: {
             'tinymce-vendor': ['tinymce'],
             'echarts-vendor': ['echarts'],
-            'antd-vue-vendor': ['ant-design-vue','@ant-design/icons-vue','@ant-design/colors'],
-            'vxe-table-vendor': ['vxe-table','vxe-table-plugin-antd','xe-utils'],
+            'antd-vue-vendor': ['ant-design-vue', '@ant-design/icons-vue', '@ant-design/colors'],
+            'vxe-table-vendor': ['vxe-table', 'vxe-table-plugin-antd', 'xe-utils'],
             'codemirror-vendor': ['codemirror'],
             //'emoji-mart-vue-fast': ['emoji-mart-vue-fast'],
             'jeecg-online-vendor': ['@jeecg/online'],
@@ -94,7 +123,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
             vue: ['vue', 'vue-router'],
             'cron-parser-vendor': ['cron-parser'],
           },
-        }
+        },
       },
       // 关闭brotliSize显示可以稍微减少打包时间
       reportCompressedSize: false,
@@ -109,6 +138,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       // setting vue-i18-next
       // Suppress warning
       __INTLIFY_PROD_DEVTOOLS__: false,
+      //question: 这里的__app_info 和global.d.ts中的__APP_INFO__有什么区别？
       __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
     css: {

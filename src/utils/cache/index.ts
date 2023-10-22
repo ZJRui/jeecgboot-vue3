@@ -3,6 +3,9 @@ import { createStorage as create, CreateStorageParams } from './storageCache';
 import { enableStorageEncryption } from '/@/settings/encryptionSetting';
 import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
 
+/**
+ * Partial<T>: 该工具类型能够构造一个新类型，并将实际类型参数T中的所有属性变为可选属性。
+ */
 export type Options = Partial<CreateStorageParams>;
 
 const createOptions = (storage: Storage, options: Options = {}): Options => {
@@ -17,6 +20,11 @@ const createOptions = (storage: Storage, options: Options = {}): Options => {
 
 export const WebStorage = create(createOptions(sessionStorage));
 
+/**
+ * storage: Storage = sessionStorage： 参数类型，参数默认值
+ * @param storage
+ * @param options
+ */
 export const createStorage = (storage: Storage = sessionStorage, options: Options = {}) => {
   return create(createOptions(storage, options));
 };

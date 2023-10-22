@@ -18,7 +18,7 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuList,switchVue3Menu } from '/@/api/sys/menu';
+import { getMenuList, switchVue3Menu } from '/@/api/sys/menu';
 import { getPermCode } from '/@/api/sys/user';
 
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -58,6 +58,10 @@ interface PermissionState {
 }
 export const usePermissionStore = defineStore({
   id: 'app-permission',
+  /**
+   * note: ():PermissionState=>{ return { }} 定义一个函数，指定函数的返回值类型是PermissionState, 当函数返回值
+   *  是一个字面量对象是，为了避免对象的{}被解析为代码块，需要将其用()包裹起来，否则会报错。
+   */
   state: (): PermissionState => ({
     permCodeList: [],
     // Whether the route has been dynamically added
@@ -206,6 +210,7 @@ export const usePermissionStore = defineStore({
 
         // 后台菜单构建
         case PermissionModeEnum.BACK:
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
           const { createMessage, createWarningModal } = useMessage();
           // 菜单加载提示
           // createMessage.loading({
@@ -222,7 +227,7 @@ export const usePermissionStore = defineStore({
             // update-begin----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---
             let hasIndex: boolean = false;
             let hasIcon: boolean = false;
-            for (let menuItem of routeList) {
+            for (const menuItem of routeList) {
               // 条件1：判断组件是否是 layouts/default/index
               if (!hasIndex) {
                 hasIndex = menuItem.component === 'layouts/default/index';
@@ -243,12 +248,11 @@ export const usePermissionStore = defineStore({
                 () =>
                   createWarningModal({
                     title: '检测提示',
-                    content:
-                      '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
-                    onOk:function () {
+                    content: '当前菜单表是 <b>Vue2版本</b>，导致菜单加载异常!<br>点击确认，切换到Vue3版菜单！',
+                    onOk: function () {
                       switchVue3Menu();
                       location.reload();
-                    }
+                    },
                   }),
                 100
               );

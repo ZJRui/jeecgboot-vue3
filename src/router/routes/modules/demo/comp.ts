@@ -3,6 +3,9 @@ import type { AppRouteModule } from '/@/router/types';
 import { getParentLayout, LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
 
+/**
+ * 组件&功能菜单
+ */
 const comp: AppRouteModule = {
   path: '/comp',
   name: 'Comp',

@@ -59,9 +59,10 @@ import JAddInput from './jeecg/components/JAddInput.vue';
 import { Time } from '/@/components/Time';
 import JRangeNumber from './jeecg/components/JRangeNumber.vue';
 import UserSelect from './jeecg/components/userSelect/index.vue';
-import JRangeDate from './jeecg/components/JRangeDate.vue'
-import JRangeTime from './jeecg/components/JRangeTime.vue'
+import JRangeDate from './jeecg/components/JRangeDate.vue';
+import JRangeTime from './jeecg/components/JRangeTime.vue';
 
+import MyInput from './sachinComps/MyInput.vue';
 const componentMap = new Map<ComponentType, Component>();
 
 componentMap.set('Time', Time);
@@ -131,6 +132,7 @@ componentMap.set('JRangeNumber', JRangeNumber);
 componentMap.set('UserSelect', UserSelect);
 componentMap.set('RangeDate', JRangeDate);
 componentMap.set('RangeTime', JRangeTime);
+componentMap.set('MyInput', MyInput);
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, component);

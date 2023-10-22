@@ -6,6 +6,11 @@
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 
+/**
+ * 1.通过 vite-plugin-svg-icons 插件封装SvgIcon组件
+ *
+ * @param isBuild
+ */
 export function configSvgIconsPlugin(isBuild: boolean) {
   const svgIconsPlugin = createSvgIconsPlugin({
     iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],

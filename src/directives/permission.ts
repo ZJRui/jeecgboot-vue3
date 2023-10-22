@@ -13,6 +13,7 @@ function isAuth(el: Element, binding: any) {
   const value = binding.value;
   if (!value) return;
   if (!hasPermission(value)) {
+    //如果没有权限则删除v-auth所在的这个节点
     el.parentNode?.removeChild(el);
   }
 }

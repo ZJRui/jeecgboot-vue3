@@ -1,6 +1,24 @@
+/**
+当使用 (reference) 引入 Less 文件时，被引入文件中的样式和变量只有在当前文件中使用了它们时才会被合并到最终的 CSS 中。
+如果在当前文件中未使用被引入文件的样式和变量，那么这些样式和变量不会被包含在最终的输出中。这种引入方式在按需引入样式和变量
+时非常有用，以减小最终生成的 CSS 文件的体积。
+ */
 @import (reference) '../color.less';
 @import 'easing';
 @import 'breakpoint';
+
+/**
+ question:下面的这个代码是什么意思？
+
+ 1.css中提供了@namespace是用来定义使用在CSS样式表中的XML名空间的@规则。定义的命名空间可以把通配、元素和属性选择器限制在指定命名空间里的元素。
+  @namespace可以用来定义默认命名空间。当定义过默认命名空间后，所有的通配选择器和类型选择器（但不 包括属性选择器，详情看下面的 ）都只应用在这个命名空间的元素中。
+  比如： @namespace  "XML-namespace-URL" ; 首先@namespace后面没有分号，其次空间名称是字符串
+
+ 2. @namespace: jeecg; 看起来像是less的变量定义，但是jeecg是什么？如果是引用变量的话应该是@jeecg， 如果是插值语法的话应该是@{jeecg}，所以这里的jeecg是什么？
+
+ 3.官方文档： https://doc.vvbin.cn/guide/settings.html#%E6%A0%B7%E5%BC%8F%E9%85%8D%E7%BD%AE
+
+ */
 
 @namespace: jeecg;
 
@@ -35,8 +53,41 @@
 
 @page-footer-z-index: 99;
 
+/***
+1. 首先 .bem() {} ,这种点号开头，后面是一个函数的写法 是Less的mixin语法。
+带有参数的混合：最初，参数仅用逗号分隔，但后来添加了分号以支持将逗号分隔的列表值传递给单个参数。
+ E:\programme\Less\官方文档\Features In-Depth I Less.js --- 功能深入 I Less.js.pdf
+2.下面代码的理解：
+这段 Less（CSS 预处理器）代码定义了一个 mixin（混入）叫做 `.bem()`。Mixin 是一种可以包含一组样式规则并在需要的地方进行引用的 Less 特性。
+这个 `.bem()` mixin 接受两个参数：`@n` 和 `@content`。`@n` 是一个占位符参数，可以在 mixin 的内部被用作变量。
+`@content` 是一个包含要嵌套执行的 Less 代码块的参数，它是一个闭包（或函数）。
+在 `.bem()` mixin 的主体内，它使用了 Less 的插值语法（`@{variable}`）将参数 `@n` 和 `@namespace` 结合起来，
+生成了一个带有命名空间前缀的 CSS 类名。然后，它调用了 `@content` 参数，将生成的 CSS 类名传递给了这个参数，这样可
+以将样式规则插入到生成的类名中。
+这段代码的目的是帮助实现 BEM（块、元素、修饰符）命名约定的样式书写。BEM 是一种 CSS 命名约定，用于增强代码的可读性和可维护性。
+在 BEM 中，类名由块（block）、元素（element）、修饰符（modifier）组成，这种方式可以帮助开发者更好地组织和管理样式。
+例如，如果在 Less 中使用这个 `.bem()` mixin，可以这样写：
+```less
+@namespace: 'my-component';
+.bem('header', {
+  font-size: 18px;
+  color: red;
+});
+```
+这会生成以下的 CSS 规则：
+```css
+.my-component-header {
+  font-size: 18px;
+  color: red;
+}
+```
+在这个例子中，`.bem()` mixin 将字符串 `'header'` 和命名空间 `'my-component'` 结合起来，
+生成了类名 `.my-component-header`，然后将样式规则嵌套插入到了这个类名中。
+
+3.什么是BEM？ E:\programme\CSS\博文\【CSS模块化之路1】使用BEM与命名空间来规范CSS - 掘金.pdf
+ */
 .bem(@n; @content) {
-  @{namespace}-@{n} {
+    @{namespace}-@{n} {
     @content();
   }
 }

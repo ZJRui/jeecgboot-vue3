@@ -6,6 +6,9 @@ import { t } from '/@/hooks/web/useI18n';
 
 const ExceptionPage = () => import('/@/views/sys/exception/Exception.vue');
 
+/**
+ * 页面&导航
+ */
 const page: AppRouteModule = {
   path: '/page-demo',
   name: 'PageDemo',

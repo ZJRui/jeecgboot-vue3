@@ -49,6 +49,17 @@
     <a-button v-auth="RoleEnum.TEST" color="success" class="mx-4"> 拥有test角色权限可见 </a-button>
 
     <a-button v-auth="[RoleEnum.TEST, RoleEnum.SUPER]" color="error" class="mx-4"> 拥有[test,super]角色权限可见 </a-button>
+
+    <hr />
+    <div>测试自定义的 ShAuthority.vue和sh-auth指令的效果</div>
+    <ShAuthority :value="'add'">
+      <a-button color="success" class="mx-4"> ShAuthority拥有add权限可见 </a-button>
+    </ShAuthority>
+    <ShAuthority :value="'update'">
+      <a-button color="success" class="mx-4"> ShAuthority 拥有update权限可见 </a-button>
+    </ShAuthority>
+    <a-button v-sh-auth="'edit'">v-sh-auth拥有edit权限可见</a-button>
+    <a-button v-sh-auth="'add'">v-sh-auth 拥有add权限可见</a-button>
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -60,9 +71,10 @@
   import { usePermission } from '/@/hooks/web/usePermission';
   import { Authority } from '/@/components/Authority';
   import { PageWrapper } from '/@/components/Page';
+  import ShAuthority from '@/components/Authority/src/ShAuthority.vue';
 
   export default defineComponent({
-    components: { Alert, PageWrapper, CurrentPermissionMode, Divider, Authority },
+    components: { ShAuthority, Alert, PageWrapper, CurrentPermissionMode, Divider, Authority },
     setup() {
       const { changeRole, hasPermission } = usePermission();
       const userStore = useUserStore();

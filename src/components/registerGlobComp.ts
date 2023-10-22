@@ -3,7 +3,7 @@ import { Icon } from './Icon';
 import AIcon from '/@/components/jeecg/AIcon.vue';
 import { Button, JUploadButton } from './Button';
 //Tinymce富文本
-import Editor from '/@/components/Tinymce/src/Editor.vue'
+import Editor from '/@/components/Tinymce/src/Editor.vue';
 
 import {
   // Need
@@ -71,9 +71,17 @@ export function registerGlobComp(app: App) {
     app.component(comp.name || comp.displayName, comp);
   });
   //仪表盘依赖Tinymce，需要提前加载（没办法按需加载了）
-  app.component(Editor.name, Editor)
+  app.component(Editor.name, Editor);
 
-  app.use(Select)
+  /**
+   * 1.为什么要use? 因为官网的示例导入就是
+   * import { DatePicker } from 'ant-design-vue';
+   * app.use(DatePicker);
+   *
+   * 2.use(Button):  会自动注册 Button 下的子组件, 例如 Button.Group *
+   */
+  app
+    .use(Select)
     .use(Alert)
     .use(Button)
     .use(Breadcrumb)
@@ -122,5 +130,5 @@ export function registerGlobComp(app: App) {
     .use(Skeleton)
     .use(Cascader)
     .use(Rate);
-  console.log("注册antd组件完成！");
+  console.log('注册antd组件完成！');
 }

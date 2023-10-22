@@ -6,6 +6,9 @@ import { mainOutRoutes } from './mainOut';
 import { PageEnum } from '/@/enums/pageEnum';
 import { t } from '/@/hooks/web/useI18n';
 
+/**
+ * Glob导入： vite支持使用特殊的import.meta.glob函数从文件系统导入多个模块   1
+ */
 const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
 
 const routeModuleList: AppRouteModule[] = [];

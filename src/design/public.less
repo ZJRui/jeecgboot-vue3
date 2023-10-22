@@ -89,6 +89,12 @@
 .j-box-bottom-button {
   height: 28px;
 
+  /**
+    在 Less 中，& 符号表示对父选择器的引用。在这个特定的代码块中，
+    &-float 是一个嵌套规则，表示当前规则的选择器（即 .j-box-bottom-button）后面紧跟着 -float 的选择器
+    &-float 是 .j-box-bottom-button 的子选择器，表示只有当 .j-box-bottom-button 使用了 -float 后缀时，这个规则才会生效。
+    通过这种方式，可以定义 .j-box-bottom-button 的不同变体（或状态），例如 .j-box-bottom-button-float，并为这些变体定义特定的样式规则。
+   */
   &-float {
     position: absolute;
     left: 0;

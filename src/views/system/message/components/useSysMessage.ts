@@ -4,6 +4,7 @@ import { getDictItemsByCode } from '/@/utils/dict/index';
 import { useRouter, useRoute } from 'vue-router'
 import { useAppStore } from '/@/store/modules/app';
 import { useTabs } from '/@/hooks/web/useTabs';
+// @ts-ignore
 import { useModal } from '/@/components/Modal';
 
 /**
@@ -149,6 +150,7 @@ export function useSysMessage() {
  * 用于消息跳转
  */
 export function useMessageHref(emit){
+  // @ts-ignore
   const messageHrefArray:any[] = getDictItemsByCode('messageHref');
   const router = useRouter();
   const appStore = useAppStore();

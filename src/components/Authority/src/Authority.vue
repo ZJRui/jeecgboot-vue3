@@ -22,6 +22,16 @@
         default: '',
       },
     },
+    /**
+     * setup函数的签名：setup?: (this: void, props: xxx, 'P'>>>, ctx: SetupContext<E, S>) => Promise<RawBindings> | RawBindings | RenderFunction | void;
+     * setup?: - 这表示 setup 参数是可选的。
+     * this: void - 表示函数中的 this 上下文（在这个函数内部，this 的值为 undefined）。
+     * Promise<RawBindings> | RawBindings | RenderFunction | void - 这是函数的返回值
+     * 其中RenderFunction - 表示一个渲染函数，通常用于返回组件的渲染结果。
+     *
+     * @param props
+     * @param slots
+     */
     setup(props, { slots }) {
       const { hasPermission } = usePermission();
 
@@ -30,6 +40,9 @@
        */
       function renderAuth() {
         const { value } = props;
+        /**
+         * 如果没有设置value，则返回slots中的default slot
+         */
         if (!value) {
           return getSlot(slots);
         }

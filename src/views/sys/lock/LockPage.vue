@@ -114,8 +114,24 @@
   }
 </script>
 <style lang="less" scoped>
+  /**
+ *1.这里是定义less的变量 @prefix-cls，
+ * 2. ~ 表示转义： 转义允许您使用任意字符串作为属性或变量值。  或  内的任何内容均按原样使用，
+ 除了  ~"anything"  ~'anything' 插值之外没有任何更改。
+  在 Less 中，~ 符号用于防止字符串插值的发生。通常，当你在字符串中使用插值语法（@{variable}）时，Less 会尝
+  试将变量的值直接嵌入到字符串中。但是，如果你希望字符串中的插值语法保持为普通文本，而不被 Less 处理，就可以使用 ~ 符号。
+  在这个例子中，@{namespace} 是一个 Less 变量，它可能是一个命名空间的名称。@prefix-cls 的值是一个字符‘
+  串 @{namespace}-lock-page，这个字符串中的插值语法被保留为普通文本，不会被解析。这样，@prefix-cls 的值会保持
+  为 @{namespace}-lock-page，直到在 Less 中使用它的时候才会被实际解析。这种方式可以用于构建动态的类名或
+  选择器，根据命名空间的不同而变化
+
+  3.question: @{namespace} 这个好像是less的针对变量的插值语法，@namespace变量的定义是在 /var/index.less中定义的。
+ */
   @prefix-cls: ~'@{namespace}-lock-page';
 
+  /**
+  note:less的变量插值  @{varName}
+   */
   .@{prefix-cls} {
     z-index: @lock-page-z-index;
 

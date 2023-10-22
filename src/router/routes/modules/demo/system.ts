@@ -3,6 +3,10 @@ import type { AppRouteModule } from '/@/router/types';
 import { LAYOUT } from '/@/router/constant';
 import { t } from '/@/hooks/web/useI18n';
 
+/**
+ * 系统管理的路由
+ */
+
 const system: AppRouteModule = {
   path: '/system',
   name: 'System',
