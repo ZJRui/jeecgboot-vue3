@@ -1,6 +1,6 @@
 <template>
   <PageWrapper>
-    <sh-basic-table :columns="columns" :data-source="data">
+    <sh-basic-table :columns="columns" :data-source="data" :loading="loading">
       <template #headerCell="{ column }">
         <template v-if="column.key === 'name'">
           <span>
@@ -37,6 +37,9 @@
         </template>
       </template>
     </sh-basic-table>
+
+    <hr />
+    <ComponentA v-bind="personRef" />
   </PageWrapper>
 </template>
 
@@ -45,6 +48,7 @@
   import SachinJvextableDemoA from '@/views/demo/sachin/jvxetabledemo/SachinJvextableDemoA.vue';
   import keepalivecomp from '@/views/demo/sachin/jvxetabledemo/keepalivecomp.vue';
   import ShBasicTable from '@/components/Table/src/ShBasicTable.vue';
+  import ComponentA from '@/views/demo/sachin/jvxetabledemo/ComponentA.vue';
   import { ref } from 'vue';
 
   const columns = [
@@ -99,4 +103,12 @@
   ];
   const refDataSourceB = ref(data);
   const refColumnsB = ref(columns);
+
+  const loading = ref(false);
+
+  const personRef = ref({
+    name: 'sachin',
+    age: 18,
+    address: 'shanghai',
+  });
 </script>

@@ -10,6 +10,10 @@ declare module 'ant-design-vue/es/locale/*' {
   export default locale as Locale & ReadonlyRecordable;
 }
 
+/**
+ * 如果没有下面的声明，则  import svgIcons from 'virtual:svg-icons-names';  将会报错
+ * question： virtual:svg-icons-names这个是什么
+ */
 declare module 'virtual:*' {
   const result: any;
   export default result;

@@ -30,6 +30,38 @@ const transform: AxiosTransform = {
    * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
+    /**
+     * 1.example:
+     * {
+     *     "joinPrefix": true,
+     *     "isReturnNativeResponse": false,
+     *     "isTransformResponse": true,
+     *     "joinParamsToUrl": false,
+     *     "formatDate": true,
+     *     "errorMessageMode": "message",
+     *     "successMessageMode": "success",
+     *     "apiUrl": "/jeecgboot",
+     *     "urlPrefix": "",
+     *     "joinTime": true,
+     *     "ignoreCancelToken": true,
+     *     "withToken": true
+     * }
+     *
+     * 2.transformRequestHook 是说对请求返回的响应进行处理，是响应处理阶段，而不是说针对请求参数进行处理，常见的调用堆栈是
+     * store中发出请求，然后Promise.then中处理请求。axios.request().then((res)=>{tranformRequestHook(res)})
+     * transformRequestHook (index.ts:56)
+     * （匿名） (Axios.ts:229)
+     * Promise.then（异步）
+     * （匿名） (Axios.ts:226)
+     * request (Axios.ts:223)
+     * get (Axios.ts:192)
+     * getUserInfo (user.ts:81)
+     * getUserInfoAction (user.ts:204)
+     * （匿名） (pinia.mjs:1375)
+     * store.<computed> (pinia.mjs:930)
+     *
+     * 因此这里的res 是Axios的Response
+     */
     const { t } = useI18n();
     const { isTransformResponse, isReturnNativeResponse } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
@@ -41,8 +73,20 @@ const transform: AxiosTransform = {
     if (!isTransformResponse) {
       return res.data;
     }
-    // 错误的时候返回
-
+    /**
+     * 1.错误的时候返回，从Axios的Reponse中解构出 业务接口返回的数据
+     * 2.示例data，
+     * {
+     *     "success": true,
+     *     "message": "",
+     *     "code": 200,
+     *     "result": {
+     *         "userInfo": {
+     *         },
+     *     },
+     *     "timestamp": 1698032662689
+     * }
+     */
     const { data } = res;
     if (!data) {
       // return '[HTTP] Request has no return value';
@@ -53,6 +97,12 @@ const transform: AxiosTransform = {
     // 这里逻辑可以根据项目进行修改
     const hasSuccess = data && Reflect.has(data, 'code') && (code === ResultEnum.SUCCESS || code === 200);
     if (hasSuccess) {
+      /**
+       * 如果message为空，或者message='',则 true&&''='', true&&''&&true=''
+       * if('')为false， ‘’====true为false，所以也就是message为空的时候不会执行if内部的代码
+       *
+       * 在JavaScript中，当使用逻辑与（&&）运算符时，如果第一个操作数为true，则返回第二个操作数，否则返回第一个操作数。
+       */
       if (success && message && options.successMessageMode === 'success') {
         //信息成功提示
         createMessage.success(message);
@@ -100,7 +150,13 @@ const transform: AxiosTransform = {
     }
     const params = config.params || {};
     const data = config.data || false;
+    /**
+     * 如果请求中有data数据，且配置中formatDate为true，则对data中的时间进行格式化
+     */
     formatDate && data && !isString(data) && formatRequestDate(data);
+    /**
+     * get请求添加时间戳
+     */
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
@@ -141,7 +197,18 @@ const transform: AxiosTransform = {
     const token = getToken();
     let tenantid = getTenantId();
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
-      // jwt token
+      /**
+       * 1.jwt token
+       * 2. options.authenticationScheme 为空，因为index.ts中createAxios的配置参数为空，
+       * 然后在deepMerge 中 authenticationScheme: '',
+       *3.为什么要设置请求头 名称为‘authorization'的头
+       * （1）服务器端向客户端返回 401（Unauthorized，未被授权的）响应状态码，并在 WWW-Authenticate 响应标头提供如何进行验证的信息，
+       *  其中至少包含有一种质询方式。比如： WWW-Authenticate: Basic realm="Usagidesign Auth"
+       * （2）之后，想要使用服务器对自己身份进行验证的客户端，可以通过包含凭据的 Authorization 请求标头进行验证。
+       * （3）通常，客户端会向用户显示密码提示，然后发送包含正确的 Authorization 标头的请求。
+       *
+       *
+       */
       config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
       config.headers[ConfigEnum.TOKEN] = token;
       //--update-begin--author:liusq---date:20210831---for:将签名和时间戳，添加在请求接口 Header
@@ -175,7 +242,6 @@ const transform: AxiosTransform = {
       }
       // update-end--author:sunjianlei---date:20220624--for: 添加低代码应用ID
       // ========================================================================================
-
     }
     return config;
   },

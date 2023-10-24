@@ -67,6 +67,9 @@ export function usePermission() {
     resetRouter();
     const routes = await permissionStore.buildRoutesAction();
     routes.forEach((route) => {
+      /**
+       * 动态添加路由
+       */
       router.addRoute(route as unknown as RouteRecordRaw);
     });
     permissionStore.setLastBuildMenuTime();

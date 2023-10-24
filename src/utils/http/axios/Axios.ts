@@ -19,6 +19,10 @@ export * from './axiosTransform';
  */
 export class VAxios {
   private axiosInstance: AxiosInstance;
+  /**
+   * 只读属性必须在声明时初始化或者构造函数中初始化
+   * @private
+   */
   private readonly options: CreateAxiosOptions;
 
   constructor(options: CreateAxiosOptions) {
@@ -220,6 +224,9 @@ export class VAxios {
       this.axiosInstance
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
+          /**
+           * 如果transformRequestHook存在，则对请求响应数据进行处理。
+           */
           if (transformRequestHook && isFunction(transformRequestHook)) {
             try {
               const ret = transformRequestHook(res, opt);
@@ -247,7 +254,6 @@ export class VAxios {
     });
   }
 
-
   /**
    * 【用于评论功能】自定义文件上传-请求
    * @param url
@@ -255,16 +261,15 @@ export class VAxios {
    */
   uploadMyFile<T = any>(url, formData) {
     const glob = useGlobSetting();
-    return this.axiosInstance
-      .request<T>({
-        url: url,
-        baseURL: glob.uploadUrl,
-        method: 'POST',
-        data: formData,
-        headers: {
-          'Content-type': ContentTypeEnum.FORM_DATA,
-          ignoreCancelToken: true,
-        },
-      });
+    return this.axiosInstance.request<T>({
+      url: url,
+      baseURL: glob.uploadUrl,
+      method: 'POST',
+      data: formData,
+      headers: {
+        'Content-type': ContentTypeEnum.FORM_DATA,
+        ignoreCancelToken: true,
+      },
+    });
   }
 }

@@ -10,6 +10,7 @@
   import { onActivated, onBeforeMount, onDeactivated, onMounted, onUnmounted, ref } from 'vue';
   import { JVxeTypes, JVxeColumn, JVxeTableInstance } from '@/components/jeecg/JVxeTable/types';
 
+
   defineOptions({
     name: 'DemoTestSachinJvextableDemoAxxxx',
   });
@@ -60,8 +61,6 @@
       ],
     },
   ]);
-
-
 
   function onDelSel() {
     const xTable = tableRef.value!.getXTable();

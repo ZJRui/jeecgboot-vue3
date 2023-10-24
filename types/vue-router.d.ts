@@ -1,6 +1,17 @@
+/**
+ * 注意文件开头没有 import RoleEnum
+ */
 export {};
 
 declare module 'vue-router' {
+  /**
+   * 1. Record是一个type
+   * type Record<K extends keyof any, T> = {
+   *     [P in K]: T;
+   * };
+   * 为什么RouteMeta接口可以 extends Type？
+   * 2. interface接口中不是应该定义方法吗？ 怎么这里都是定义的属性？
+   */
   interface RouteMeta extends Record<string | number | symbol, unknown> {
     orderNo?: number;
     // title
@@ -12,6 +23,7 @@ declare module 'vue-router' {
     // Whether to ignore permissions
     ignoreAuth?: boolean;
     // role info
+    //question:为什么这个d.ts文件中可以直接使用 RoleEnum，而不需要import？
     roles?: RoleEnum[];
     // Whether not to cache
     ignoreKeepAlive?: boolean;

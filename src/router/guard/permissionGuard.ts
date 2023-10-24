@@ -22,14 +22,20 @@ const ROOT_PATH = RootRoute.path;
 
 //update-begin---author:wangshuai ---date:20220629  for：[issues/I5BG1I]vue3不支持auth2登录------------
 //update-begin---author:wangshuai ---date:20221111  for: [VUEN-2472]分享免登录------------
-const whitePathList: PageEnum[] = [LOGIN_PATH, OAUTH2_LOGIN_PAGE_PATH,SYS_FILES_PATH];
+//["/login","/oauth2-app/login","/file/share" ]
+const whitePathList: PageEnum[] = [LOGIN_PATH, OAUTH2_LOGIN_PAGE_PATH, SYS_FILES_PATH];
 //update-end---author:wangshuai ---date:20221111  for: [VUEN-2472]分享免登录------------
 //update-end---author:wangshuai ---date:20220629  for：[issues/I5BG1I]vue3不支持auth2登录------------
 
 export function createPermissionGuard(router: Router) {
+  /**
+   * question:这里为什么都是调用usexxxWithout?而不是useXxx
+   *  2.下面的两个变量，本质上是被放置到了route的beforeEach函数中使用了，所以为什么不是直接在beforeEach函数中调用useXxx呢？而在外面调用？
+   */
   const userStore = useUserStoreWithOut();
   const permissionStore = usePermissionStoreWithOut();
   router.beforeEach(async (to, from, next) => {
+    // userStore.getUserInfo.homePath null
     if (
       from.path === ROOT_PATH &&
       to.path === PageEnum.BASE_HOME &&
@@ -46,12 +52,12 @@ export function createPermissionGuard(router: Router) {
     if (whitePathList.includes(to.path as PageEnum)) {
       if (to.path === LOGIN_PATH && token) {
         const isSessionTimeout = userStore.getSessionTimeout;
-        
+
         //update-begin---author:scott ---date:2023-04-24  for：【QQYUN-4713】登录代码调整逻辑有问题，改造待观察--
         //TODO vben默认写法，暂时不知目的，有问题暂时先注释掉
         //await userStore.afterLoginAction();
         //update-end---author:scott ---date::2023-04-24  for：【QQYUN-4713】登录代码调整逻辑有问题，改造待观察--
-        
+
         try {
           if (!isSessionTimeout) {
             next((to.query?.redirect as string) || '/');
@@ -72,7 +78,10 @@ export function createPermissionGuard(router: Router) {
 
     // token does not exist
     if (!token) {
-      // You can access without permission. You need to set the routing meta.ignoreAuth to true
+      /**
+       * You can access without permission. You need to set the routing meta.ignoreAuth to true
+       * 如果路由本身配置了不需要认证，您可以在没有权限的情况下访问。您需要将路由meta.ignoreAuth设置为true
+       */
       if (to.meta.ignoreAuth) {
         next();
         return;
@@ -126,6 +135,13 @@ export function createPermissionGuard(router: Router) {
       }
     }
 
+    /**
+     * 如果已经构建多动态路由，则放行。
+     * next是一个函数，类型为NavigationGuardNext，有多种调用方式：
+     * 1.next() 放行
+     * 2.next(Error类型参数)
+     * 3.next(location:RouteLocationRaw)
+     */
     if (permissionStore.getIsDynamicAddedRoute) {
       next();
       return;

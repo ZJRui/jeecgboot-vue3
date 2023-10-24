@@ -27,10 +27,24 @@ export interface RequestOptions {
   withToken?: boolean;
 }
 
+/**
+ * 定义服务器接口返回数据的格式
+ * {
+ *     "success": true,
+ *     "message": "",
+ *     "code": 200,
+ *     "result": {
+ *         "userInfo": {
+ *         },
+ *     },
+ *     "timestamp": 1698032662689
+ * }
+ */
 export interface Result<T = any> {
   code: number;
   type: 'success' | 'error' | 'warning';
   message: string;
+  success?: string;
   result: T;
 }
 

@@ -40,7 +40,11 @@ interface AuthItem {
 interface PermissionState {
   // Permission code list
   permCodeList: string[] | number[];
-  // Whether the route has been dynamically added
+  /**
+   * 是否动态添加了路由。在actions.login中会调用afterLoginAction,在afterLoginAction函数中
+   * 会判断如果isDynamicAddedRoute为false，则构建routes，遍历每一个routes，使用
+   * router.addRoute添加到路由中，然后将isDynamicAddedRoute设置为true。
+   */
   isDynamicAddedRoute: boolean;
   // To trigger a menu update
   lastBuildMenuTime: number;
@@ -128,6 +132,55 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
+      /**
+       * 该方法的调用是在afterLoginAction中如果permissionStore.isDynamicAddedRoute为false，
+       * 则 buildRoutesAction，build时如果permissionMode为back后台，则调用该方法。
+       *
+       * 1.allAuth:全部menu_type=2的按钮权限配置集合
+       * codeList:当前用户所拥有的menu_type=2的菜单权限编码
+       * auth:当前用户 所拥有的menu_type=2的按钮权限（用户拥有的权限集合）
+       * code_list 和auth都是当前用户的按钮权限信息，前者只存放了编码。
+       * 后者存放了编码、权限策略，菜单名称
+
+       * menu_type:0:一级菜单 1：子菜单，2：按钮权限
+       *
+       * {
+       *     "allAuth": [
+       *         {
+       *             "action": "btn:add",
+       *             "describe": "btn:add",
+       *             "type": "1",---》权限策略1显示2禁用
+       *             "status": "1"
+       *         },
+       *         {
+       *             "action": "system:user:edit",
+       *             "describe": "用户编辑",
+       *             "type": "1",
+       *             "status": "1"
+       *         },
+       *
+       *     ]
+       *     "auth": [
+       *     {
+       *         "action": "demo.dbarray",
+       *         "describe": "禁用",
+       *         "type": "2"
+       *     },
+       *     {
+       *         "action": "onl:drag:page:delete",
+       *         "describe": "删除仪表盘",
+       *         "type": "1"
+       *     }, ]
+       * ],
+       * "codeList": [
+       *     "demo.dbarray",
+       *     "onl:drag:page:delete",
+       *     "drag:template:edit",
+       *     "system:user:changepwd",
+       *     "system:permission:add",
+       * ]
+       * }
+       */
       const systemPermission = await getPermCode();
       const codeList = systemPermission.codeList;
       this.setPermCodeList(codeList);
@@ -305,5 +358,9 @@ export const usePermissionStore = defineStore({
 
 // 需要在设置之外使用
 export function usePermissionStoreWithOut() {
+  /**
+   * question: usePermissionStore是defineStore的返回值，这是一个函数，为什么可以传递store（createPinia的返回值）作为参数？
+   *  一般对usePermissionStore的使用都是 const permissionStore = usePermissionStore(); permissionStore.setPermCodeList(codeList);
+   */
   return usePermissionStore(store);
 }

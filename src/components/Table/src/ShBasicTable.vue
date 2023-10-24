@@ -3,7 +3,8 @@
     <p>this is ShBasicTable.vue</p>
     <p> $slots:{{ $slots }}</p>
     <p>Object.keys($slots) :{{ Object.keys($slots) }}</p>
-    <a-table :columns="columns" :data-source="dataSource">
+    <!--v-bind绑定一个对象，将对象的属性绑定到组件的props上--->
+    <a-table v-bind="$props">
       <template v-for="item in Object.keys($slots)" :key="item" #[item]="data">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
@@ -44,9 +45,18 @@
 </template>
 <script setup lang="ts">
   import { useSlots } from 'vue';
+  import { tableProps } from 'ant-design-vue/es/table';
 
   console.log('useSlots', useSlots());
-  const props = defineProps(['columns', 'dataSource']);
+  const tablePropperties = tableProps();
+  /**
+   * 定义ShBasicTable具有的props，这些props会被传递给a-table组件。
+   * 还有一种更为快捷的方式： 使用tableProps方法获取a-table的所有的props的定义，将这些定义扩展到当前的ShBasicTable组件上。
+   *
+   */
+  const props = defineProps(['columns', 'dataSource', 'loading']);
+  // const props=defineProps({...tableProps()});
+  console.log('tablePropperties', tablePropperties);
 </script>
 
 <style scoped lang="less"></style>

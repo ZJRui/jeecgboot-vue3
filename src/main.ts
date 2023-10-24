@@ -71,7 +71,12 @@ async function bootstrap() {
   // 配置路由
   setupRouter(app);
 
-  // 路由保护
+  /**
+   * 路由保护
+   * setupRouterGuard--》createPermissionGuard--》router.beforeEach(()=>{
+   *    await permissionStore.buildRoutesAction();//根据权限动态构建路由
+   * })
+   */
   setupRouterGuard(router);
 
   // 注册全局指令

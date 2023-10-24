@@ -20,6 +20,59 @@ Object.keys(modules).forEach((key) => {
   routeModuleList.push(...modList);
 });
 
+/**
+ * routeModuleList:
+ * [
+ *     {
+ *         "path": "/about",
+ *         "name": "About",
+ *         "redirect": "/about/index",
+ *         "meta": {
+ *             "hideChildrenInMenu": true,
+ *             "icon": "simple-icons:about-dot-me",
+ *             "title": "routes.dashboard.about",
+ *             "orderNo": 100000
+ *         },
+ *         "children": [
+ *             {
+ *                 "path": "index",
+ *                 "name": "AboutPage",
+ *                 "meta": {
+ *                     "title": "routes.dashboard.about",
+ *                     "icon": "simple-icons:about-dot-me",
+ *                     "hideMenu": true
+ *                 }
+ *             }
+ *         ]
+ *     },
+ *     {
+ *         "path": "/dashboard",
+ *         "name": "Dashboard",
+ *         "redirect": "/dashboard/analysis",
+ *         "meta": {
+ *             "orderNo": 10,
+ *             "icon": "ion:grid-outline",
+ *             "title": "routes.dashboard.dashboard"
+ *         },
+ *         "children": [
+ *             {
+ *                 "path": "analysis",
+ *                 "name": "Analysis",
+ *                 "meta": {
+ *                     "title": "routes.dashboard.analysis"
+ *                 }
+ *             },
+ *             {
+ *                 "path": "workbench",
+ *                 "name": "Workbench",
+ *                 "meta": {
+ *                     "title": "routes.dashboard.workbench"
+ *                 }
+ *             }
+ *         ]
+ *     },
+ * ]
+ */
 export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
 
 export const RootRoute: AppRouteRecordRaw = {
