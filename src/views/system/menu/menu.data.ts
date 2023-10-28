@@ -1,9 +1,7 @@
-import { BasicColumn } from '/@/components/Table';
-import { FormSchema } from '/@/components/Table';
+import { BasicColumn, FormSchema } from '/@/components/Table';
 import { h } from 'vue';
 import { Icon } from '/@/components/Icon';
-import { duplicateCheck } from '../user/user.api';
-import { ajaxGetDictItems ,checkPermDuplication } from './menu.api';
+import { ajaxGetDictItems, checkPermDuplication } from './menu.api';
 import { render } from '/@/utils/common/renderUtils';
 
 const isDir = (type) => type === 0;
@@ -102,7 +100,8 @@ export const formSchema: FormSchema[] = [
             },
           ]);
           //update-begin---author:wangshuai ---date:20220729  for：[VUEN-1834]只有一级菜单，才默认值，子菜单的时候，清空------------
-          if (isMenu(e) && !formModel.id && formModel.component=='layouts/RouteView') {
+          // question: 前端组件 layouts/RouteView代表哪个组件？
+          if (isMenu(e) && !formModel.id && formModel.component === 'layouts/RouteView') {
             formModel.component = '';
           }
           //update-end---author:wangshuai ---date:20220729  for：[VUEN-1834]只有一级菜单，才默认值，子菜单的时候，清空------------
@@ -141,8 +140,8 @@ export const formSchema: FormSchema[] = [
     required: true,
     ifShow: ({ values }) => !(values.component === ComponentTypes.IFrame && values.internalOrExternal) && values.menuType !== 2,
     //update-begin-author:zyf date:2022-11-02 for: 聚合路由允许路径重复
-     dynamicRules: ({ model, schema }) => {
-       return checkPermDuplication(model, schema, true);
+    dynamicRules: ({ model, schema }) => {
+      return checkPermDuplication(model, schema, true);
     },
     //update-end-author:zyf date:2022-11-02 for: 聚合路由允许路径重复
   },
@@ -153,7 +152,8 @@ export const formSchema: FormSchema[] = [
     componentProps: {
       placeholder: '请输入前端组件',
     },
-    defaultValue:'layouts/RouteView',
+    // question: 前端组件 layouts/RouteView代表哪个组件？
+    defaultValue: 'layouts/RouteView',
     required: true,
     ifShow: ({ values }) => !isButton(values.menuType),
   },

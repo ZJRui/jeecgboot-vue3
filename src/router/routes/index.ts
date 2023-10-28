@@ -7,7 +7,22 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { t } from '/@/hooks/web/useI18n';
 
 /**
- * Glob导入： vite支持使用特殊的import.meta.glob函数从文件系统导入多个模块   1
+ * 1.Glob导入： vite支持使用特殊的import.meta.glob函数从文件系统导入多个模块   1
+ * glob的导入返回值的形式参考 E:\programme\Vite\官方文档\功能 I Vite 官方中文文档.pdf
+ *   默认情况下是懒加载 返回值是一个对象：
+ *   const  modules_importGlob  =  {
+ * ' ./dir/foo.js ' :  ()  =>  import ( ' ./dir/foo.js ' ) ,
+ * ' ./dir/bar.js ' :  ()  =>  import ( ' ./dir/bar.js ' ) ,
+ * }
+ * 如果使用了eager:true,则等价于
+ * import  *  as  __glob__0_0  from  ' ./dir/foo.js '
+ * import  *  as  __glob__0_1  from  ' ./dir/bar.js '
+ * const  modules  =  {
+ * ' ./dir/foo.js ' :  __glob__0_0 ,
+ * ' ./dir/bar.js ' :  __glob__0_1 ,
+ * }
+ *
+ * 2.好处：不需要import modules下的文件了。需要注意的是
  */
 const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
 
@@ -15,6 +30,7 @@ const routeModuleList: AppRouteModule[] = [];
 
 // 加入到路由集合中
 Object.keys(modules).forEach((key) => {
+  //使用模块对象的default 作为路由配置项
   const mod = (modules as Recordable)[key].default || {};
   const modList = Array.isArray(mod) ? [...mod] : [mod];
   routeModuleList.push(...modList);

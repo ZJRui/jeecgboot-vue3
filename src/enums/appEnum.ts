@@ -39,6 +39,9 @@ export enum SessionTimeoutProcessingEnum {
  * 权限模式
  */
 export enum PermissionModeEnum {
+  // 权限模式,默认前端角色权限模式
+  // ROUTE_MAPPING: 前端模式（菜单由路由生成，默认）
+  // ROLE：前端模式（菜单路由分开）
   // role
   ROLE = 'ROLE',
   // 后台

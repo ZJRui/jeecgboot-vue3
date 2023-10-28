@@ -187,6 +187,7 @@ export const usePermissionStore = defineStore({
       this.setAuthData(systemPermission);
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
+      // @ts-ignore
       const { t } = useI18n();
       const userStore = useUserStore();
       const appStore = useAppStoreWithOut();
@@ -195,6 +196,10 @@ export const usePermissionStore = defineStore({
       const roleList = toRaw(userStore.getRoleList) || [];
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
 
+      /**
+       * 根据路由的元信息（meta）中的角色信息（roles）来判断当前用户是否有权限访问该路由。
+       *
+       */
       const routeFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
         const { roles } = meta || {};
@@ -202,6 +207,10 @@ export const usePermissionStore = defineStore({
         return roleList.some((role) => roles.includes(role));
       };
 
+      /**
+       * 根据路由的元信息（meta）中的 ignoreRoute 属性，判断当前路由是否需要被忽略（即不包含在结果中）。
+       * @param route
+       */
       const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
         const { ignoreRoute } = meta || {};
@@ -210,11 +219,15 @@ export const usePermissionStore = defineStore({
 
       /**
        * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
+       *
+       * 在路由配置中找到与用户的主页路径匹配的路由，并给该路由的元信息（meta）中添加一个 affix: true 的属性，
+       * 表示该路由需要在侧边栏保持固定状态。这通常用于将用户的主页（Home 页面）设置为固定的标签页，无法被关闭。
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return;
         let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
         function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
+          //parentPath 表示当前处理的路由的父级路径，用于构建当前路由的完整路径。
           if (parentPath) parentPath = parentPath + '/';
           routes.forEach((route: AppRouteRecordRaw) => {
             const { path, children, redirect } = route;
@@ -227,6 +240,8 @@ export const usePermissionStore = defineStore({
                 throw new Error('end');
               }
             }
+            //如果当前路由有子路由（children 存在且不为空数组），则继续递归处理子路由，并
+            // 将当前路由的路径作为父级路径传入。
             children && children.length > 0 && patcher(children, currentPath);
           });
         }
@@ -238,6 +253,9 @@ export const usePermissionStore = defineStore({
         return;
       };
 
+      /**
+       * projectSetting.ts中设置了permissionMode为back
+       */
       switch (permissionMode) {
         case PermissionModeEnum.ROLE:
           routes = filter(asyncRoutes, routeFilter);
@@ -263,7 +281,7 @@ export const usePermissionStore = defineStore({
 
         // 后台菜单构建
         case PermissionModeEnum.BACK:
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { createMessage, createWarningModal } = useMessage();
           // 菜单加载提示
           // createMessage.loading({
@@ -276,10 +294,78 @@ export const usePermissionStore = defineStore({
           let routeList: AppRouteRecordRaw[] = [];
           try {
             this.changePermissionCode();
+            /**
+             * 获取菜单树
+             * [
+             *   {
+             *     "redirect": null,
+             *     "path": "/demo/test",
+             *     "component": "layouts/RouteView",
+             *     "route": "1", //是否路由菜单: 0:不是  1:是（默认值1）
+             *     "children": [
+             *       {
+             *         "path": "/online/cgformList/558798e2e1a04ed6aad0e1ca01a0efea",
+             *         "component": "111",
+             *         "route": "0",
+             *         "meta": {
+             *           "keepAlive": false,
+             *           "internalOrExternal": false,
+             *           "componentName": "111",
+             *           "title": "Bank"
+             *         },
+             *         "name": "online-cgformList-558798e2e1a04ed6aad0e1ca01a0efea",
+             *         "id": "1714829031943294978"
+             *       },
+             *       {
+             *         "path": "/abc",
+             *         "component": "abc",
+             *         "route": "0",
+             *         "children": [
+             *          ...
+             *         ],
+             *         "meta": {
+             *           "keepAlive": false,
+             *           "internalOrExternal": false,
+             *           "componentName": "abc",
+             *           "title": "组件测试"
+             *         },
+             *         "name": "abc",
+             *         "id": "1714940010819604482"
+             *       }
+             *     ],
+             *     "meta": {
+             *       "keepAlive": false,
+             *       "internalOrExternal": false,
+             *       "componentName": "RouteView",
+             *       "title": "Demo_Test"
+             *     },
+             *     "name": "demo-test",
+             *     "id": "1714572866088869890"
+             *   },
+             *   {
+             *     "redirect": "/online/cgform",//重定向到 菜单“online表单开发”
+             *     "path": "/online",
+             *     "component": "layouts/default/index",
+             *     "route": "1",
+             *     "hidden": true,
+             *     "children": [
+             *
+             *     ],
+             *     "meta": {
+             *       "hideMenu": true
+             *     },
+             *     "name": "online",
+             *     "id": "1455100420297859074"
+             *   }
+             * ]
+             */
             routeList = (await getMenuList()) as AppRouteRecordRaw[];
             // update-begin----author:sunjianlei---date:20220315------for: 判断是否是 vue3 版本的菜单 ---
             let hasIndex: boolean = false;
             let hasIcon: boolean = false;
+            /**
+             * note: for of 和for in的区别   for ... in 循环读取键名， for ... of 循环读取键值
+             */
             for (const menuItem of routeList) {
               // 条件1：判断组件是否是 layouts/default/index
               if (!hasIndex) {

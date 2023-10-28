@@ -129,10 +129,26 @@ console.log(import('@/app.vue').then((res) => console.log(res)));
 export type Component<T extends any = any> = ReturnType<typeof defineComponent> | (() => Promise<typeof import('*.vue')>) | (() => Promise<T>);
 
 /**
- * “Omit<T, K>”工具类型与“Pick<T, K>”工具类型是互补的，它能够从已有对象类型中剔除给定的属性，然后构建出一个新的对象类型。
+ * 1.“Omit<T, K>”工具类型与“Pick<T, K>”工具类型是互补的，它能够从已有对象类型中剔除给定的属性，然后构建出一个新的对象类型。
+ *
+ * 2.RouteRecordRaw 是 Vue Router v4+ 中的一个接口类型，用于描述路由配置信息。在 Vue Router
+ * 中，路由配置是一个数组，数组的每个元素描述了一个路由规则。RouteRecordRaw 接口用于定义这些路由规则的类型。
+ * path: 路由路径，用于匹配路由。
+ * name: 路由名称，用于通过名称进行导航。
+ * component: 路由对应的组件。
+ * components: 命名视图的路由对应的组件。
+ * redirect: 重定向的路径或者路由对象。
+ * alias: 路由的别名。
+ * children: 子路由的配置。
+ * meta: 路由元信息，可以用于存储自定义数据。
+ * props: 将路由参数映射到组件的 props。
  */
 // @ts-ignore
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
+  /**
+   * 配置菜单时会设置url，后端在根据菜单sys_permission返回给前端菜单信息的时候，菜单信息也被作为了路由信息
+   * 路由name (通过URL生成路由name,路由name供前端开发，页面跳转使用),也就是菜单的url 将/替换为-,作为路由的name
+   */
   name: string;
   meta: RouteMeta;
   component?: Component | string;

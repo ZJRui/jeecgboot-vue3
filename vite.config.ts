@@ -1,7 +1,7 @@
 /**
  * 针对类型的导入到处语法
  */
-import type { UserConfig, ConfigEnv } from 'vite';
+import type { UserConfig, ConfigEnv,defineConfig } from 'vite';
 import pkg from './package.json';
 import dayjs from 'dayjs';
 
@@ -273,3 +273,19 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
   };
 };
+
+  function viteConfigFn(){
+    /**
+     * 开发服务器控制台输出 // process.node_env development
+     * vite本身是一个NodeJs进程，启动的命令是 vite --config vite.config.js,因此可以使用NodeJs的process对象
+     */
+    console.log("process.node_env",process.env.NODE_ENV)
+    /**
+     * 错误写法 vite.config.js中无法使用import.meta.env
+     * E:\programme\Vite\博文\为什么vite.config.js中无法使用import.meta.env的环境变量 .pdf
+     * "import.meta" is not available with the "cjs" output format and will be empty [empty-import-meta]
+     */
+    // console.log("import.meta.env.mode",import.meta.env.mode)
+  }
+
+  viteConfigFn();

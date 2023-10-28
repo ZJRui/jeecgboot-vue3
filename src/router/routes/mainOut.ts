@@ -6,7 +6,7 @@ the contents of the file still need to log in to access
 import type { AppRouteModule } from '/@/router/types';
 
 // test
-// http:ip:port/main-out
+// http:ip:port/main-out, 位于主框架之外的页面
 export const mainOutRoutes: AppRouteModule[] = [
   {
     path: '/main-out',

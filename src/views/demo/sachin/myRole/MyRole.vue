@@ -50,6 +50,12 @@
     },
   });
 
+  /**
+   * registerTable的作用： 一个vue文件中可以写多个BasicTable组件标签。
+   * registerTable是useTable的返回值， useTable接收配置参数
+   * const [registerTable] = useTable(配置columns等参数)
+   * 因此    <BasicTable @register="registerTable"> 实际上是让配置参数和BasicTable组件标签产生关联。
+   */
   const [registerTable, { reload }] = tableContext;
   const [registerModal, { openModal }] = useModal();
   function onAddClick() {

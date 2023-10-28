@@ -210,6 +210,33 @@ export class VAxios {
 
     const { requestOptions } = this.options;
 
+    /**
+     *
+     * 1.一般我们调用get方法发送请求都是 defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, {})
+     * 其中第一个参数是 AxiosRequestConfig 对象，这是Axios的配置对象，defHttp.get会进入这里的request
+     *
+     * 这里的request方法本质上是代理使用了 Axios的axios.request(config)方法
+     * defHttp.get的第二个参数是空对象，虽然参数是空对象，下面的代码会将空对象和默认的requestOptions合并
+     *
+     * 项目默认的requestOptions 中配置了 apiUrl: globSetting.apiUrl=/jeectboot.
+     * 然后请求被发送，进入到请求拦截器 beforeRequestHook，判断apiUrl不为空，则添加到url前面，因此整个请求的url变成了
+     * /jeecgboot/sys/user/getUserInfo，而这个请求地址以/jeecgboot开头 会被代理到 http://localhost:8080/jeecg-boot
+     *
+     * 这里想表达的意思是：项目在配置Axios实例的时候并没有配置baseUrl属性. 如果你配置了baseUrl，那么每个请求的前面都会添加该前缀。
+     * 当有多个后天服务器接口的时候，如何配置请求代理到不同的后台服务器呢？
+     *
+     * 因此基于这样的原理，默认情况下 都会在请求的url前面添加上 apiUrl: globSetting.apiUrl=/jeectboot.
+     *
+     * 那么假设我有一个 product接口，接口的后端地址是 http://localshot:10000/product/:brandId/list 查询某一个品牌的产品。那么如何配置？
+     * 首先 需要配置代理将 /product 代理到 http://localshot:10000/product， 也就是在 vite.config.ts中配置['/product', 'http://localshot:10000/product']
+     * 因为在proxy.ts中创建代理的时候会把请求/product/abc 重写成去掉前缀/product，然后拼接到代理的地址上，也就是 http://localshot:10000/product/abc
+     * 因此，我们发送的请求地址需要以/product前缀开头，可以在发送请求的时候传递配置对象 {'apiUrl’:'/product'}
+     * defHttp.get({url:'xiaomi/list'},{'apiUrl’:'/product'}) 这样就相当于使用 {'apiUrl’:'/product'} 覆盖了默认的requestOptions的apiUrl,从而
+     * 实现了在请求url前添加/product前缀
+     *
+     *
+     *
+     */
     const opt: RequestOptions = Object.assign({}, requestOptions, options);
 
     const { beforeRequestHook, requestCatchHook, transformRequestHook } = transform || {};

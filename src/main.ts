@@ -17,6 +17,7 @@ import { useSso } from '/@/hooks/web/useSso';
 // 注册online模块lib
 import { registerPackages } from '/@/utils/monorepo/registerPackages';
 
+
 /**
  * Vite在一个特殊的import.meta.env对象上暴露环境变量，这里有一些在所有情况下都可以使用的内建变量
  * 1.import.meta.env.MODE: 当前构建模式
@@ -46,6 +47,7 @@ if (import.meta.env.DEV) {
    */
   import('ant-design-vue/dist/antd.less');
 }
+
 async function bootstrap() {
   // 创建应用实例
   const app = createApp(App);
@@ -96,3 +98,5 @@ async function bootstrap() {
 }
 
 bootstrap();
+
+

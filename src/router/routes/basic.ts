@@ -14,6 +14,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
    *  向到这个通配符路由，使得应用程序能够在一个特定的页面中显示友好的“页面未找到”提示信息。
    *  参考《E:\programme\vue-router\官方文档\带参数的动态路由匹配 I Vue Router.pdf》
    *
+   * 4.question: 为什么这里配置的path和 children中配置的path是相同的？  直接配置一个不就好了吗？
    */
   path: '/:path(.*)*',
   //定义命名路由，然后可以$router.push({name:'page-not-found'})跳转到这个路由
@@ -22,7 +23,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   meta: {
     title: 'ErrorPage',
     hideBreadcrumb: true,
-    hideMenu: true,
+    hideMenu: true, //不显示在菜单中
   },
   children: [
     {

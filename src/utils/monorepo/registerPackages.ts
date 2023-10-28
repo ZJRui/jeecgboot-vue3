@@ -16,6 +16,11 @@ const installOptions = {
 /** 注册模块 */
 function use(app: App, pkg) {
   app.use(pkg, installOptions);
+  /**
+   * 这个getViews是 模块@jeecg/online  的默认导出对象身上的属性
+   * node_modules/.pnpm/@jeecg+online@3.5.3-vite4/node_modules/@jeecg/online/index-6a09a912.mjs
+   *
+   */
   registerDynamicRouter(pkg.getViews);
 }
 

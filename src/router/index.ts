@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router';
 import type { App } from 'vue';
 
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import { basicRoutes } from './routes';
 
 // 白名单应该包含基本静态路由
@@ -9,6 +9,7 @@ const WHITE_NAME_LIST: string[] = [];
 const getRouteNames = (array: any[]) =>
   array.forEach((item) => {
     WHITE_NAME_LIST.push(item.name);
+    //子路由也放入到白名单中
     getRouteNames(item.children || []);
   });
 getRouteNames(basicRoutes);
@@ -25,6 +26,9 @@ export const router = createRouter({
 export function resetRouter() {
   router.getRoutes().forEach((route) => {
     const { name } = route;
+    /**
+     * 对不在白名单中的route进行删除。白名单中的route主要是加载了 routes/index.ts+basic.ts+mainOut.ts中配置的路由
+     */
     if (name && !WHITE_NAME_LIST.includes(name as string)) {
       router.hasRoute(name) && router.removeRoute(name);
     }

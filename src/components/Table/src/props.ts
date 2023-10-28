@@ -33,6 +33,13 @@ export const basicProps = {
   indentSize: propTypes.number.def(24),
   canColDrag: propTypes.bool.def(true),
   api: {
+    /**
+     * 1 PropType<(...arg: any[]) => Promise<any>> 这是函数类型字面量的写法，PropType是输入参数，Promise是返回值
+     * 2. 在 TypeScript 中，as 关键字被用于进行类型断言（Type Assertion）。类型断言是在编译阶段告诉编译器某个值的类型，可以绕过编译器的类型检查。
+     *    "abc" as number会提示 TS2352: Conversion of type 'string' to type 'number' may be a mistake
+     *    下面的Function 是函数，  PropType=>Promise也是函数类型
+     */
+
     type: Function as PropType<(...arg: any[]) => Promise<any>>,
     default: null,
   },

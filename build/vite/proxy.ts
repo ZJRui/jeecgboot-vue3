@@ -23,6 +23,9 @@ export function createProxy(list: ProxyList = []) {
     // https://github.com/http-party/node-http-proxy#options
     ret[prefix] = {
       target: target,
+
+      //当进行代理时，Host 头部的源默认会保持原状；你可以设置 changeOrigin 为 true 来覆盖这种行为；变成target对应得地址
+
       changeOrigin: true,
       ws: true,
       rewrite: (path) => path.replace(new RegExp(`^${prefix}`), ''),

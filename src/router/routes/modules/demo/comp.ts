@@ -22,6 +22,7 @@ const comp: AppRouteModule = {
       path: 'jeecg',
       name: 'JeecgDemo',
       redirect: '/comp/jeecg/basic',
+      //question:getParentLayout有什么用你？
       component: getParentLayout('JeecgDemo'),
       meta: {
         title: t('routes.demo.comp.jeecg'),
