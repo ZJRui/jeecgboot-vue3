@@ -42,6 +42,20 @@ function createConfig(params: CreateConfigParams) {
 
 export function runBuildConfig() {
   const config = getEnvConfig();
+  /**
+   * configFileName不是配置文件的名称，而是window对象的属性名称。
+   * configFileName= __PRODUCTION__JEECGBOOTADMIN__CONF__
+   * GLOB_CONFIG_FILE_NAME=_app.config.js
+   * 这里主要是生成_app.config.js文件，该文件的内容如下：
+   * #window.__PRODUCTION__VUE_VBEN_ADMIN__CONF__ = {
+   * #  VITE_GLOB_APP_TITLE: 'vben admin',
+   * #  VITE_GLOB_APP_SHORT_NAME: 'vue_vben_admin',
+   * #  VITE_GLOB_API_URL: '/app',
+   * #  VITE_GLOB_API_URL_PREFIX: '/',
+   * #  VITE_GLOB_UPLOAD_URL: '/upload',
+   * #};
+   *
+   */
   const configFileName = getConfigFileName(config);
   createConfig({ config, configName: configFileName, configFileName: GLOB_CONFIG_FILE_NAME });
 }

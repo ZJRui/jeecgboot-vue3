@@ -33,6 +33,9 @@
   export default defineComponent({
     name: 'DefaultLayout',
     components: {
+      /**
+       * Features和Footer都是 异步组件，在Vue面板显示的时候会显示为<AsyncComponentWrapper>
+       */
       LayoutFeatures: createAsyncComponent(() => import('/@/layouts/default/feature/index.vue')),
       LayoutFooter: createAsyncComponent(() => import('/@/layouts/default/footer/index.vue')),
       LayoutHeader,

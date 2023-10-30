@@ -88,7 +88,19 @@
         ];
       });
 
+      /**
+       * 使用listenerRouteChange方法，注册一个listener。
+       *
+       * 当路由发生变化的时候 src/router/guard/index.ts中 createPageGuard方法 设置了route.beforeEach路由守卫 ，守卫会执行
+       *  setRouteChange(to);这个set方法会找到路由变化事件的监听listener，执行每一个listener，其中这里注册的函数就是其中的一个Listener。
+       *
+       *  当前listener的主要工作是 ，listener接收的route是toRoute,然后执行addTab
+       *
+       */
       listenerRouteChange((route) => {
+        /**
+         * route为toRoute
+         */
         const { name } = route;
         if (name === REDIRECT_NAME || !route || !userStore.getToken) {
           return;

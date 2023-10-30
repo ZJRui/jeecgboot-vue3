@@ -78,6 +78,9 @@ export const useMultipleTabStore = defineStore({
           continue;
         }
         const name = item.name as string;
+        /**
+         * 把所有路由的name属性添加到cacheMap中
+         */
         cacheMap.add(name);
       }
       this.cacheTabList = cacheMap;
@@ -96,6 +99,7 @@ export const useMultipleTabStore = defineStore({
         this.cacheTabList.delete(findTab);
       }
       const redo = useRedo(router);
+      // 执行刷新
       await redo();
     },
     clearCacheTabs(): void {
@@ -124,6 +128,18 @@ export const useMultipleTabStore = defineStore({
     },
 
     async addTab(route: RouteLocationNormalized) {
+      /**
+       * 1.首先要明白 addTab并不是说会真正的创建一个Tab 然后添加到某一个list中。
+       *  我们这里主要是使用keep-alive 缓存 每一个路由显示的组件。
+       *  keep-alive 会根据include配置属性来确定该组件是否需要被缓存。
+       *  因此我们需要在路由发生变化的时候 路由守卫的beforeEach中 针对toPath 做 add 到include的操作。
+       *  这样路由切换到next的时候 就会把当前的组件缓存起来，而不是销毁。
+       *  在这里我们通过 updateCacheTab 缓存的是路由的name属性。将name属性 组为include属性。
+       *  因此我们要求组件的name属性和路由的name属性相同，这样才能被keep-alive缓存。
+       *
+       *
+       * 解构toRoute
+       */
       const { path, name, fullPath, params, query, meta } = getRawRoute(route);
       // 404  The page does not need to add a tab
       if (
@@ -136,7 +152,9 @@ export const useMultipleTabStore = defineStore({
       }
 
       let updateIndex = -1;
-      // Existing pages, do not add tabs repeatedly
+      /**
+       * 检查是否是现有页面，请勿重复添加选项卡
+       */
       const tabHasExits = this.tabList.some((tab, index) => {
         updateIndex = index;
         return (tab.fullPath || tab.path) === (fullPath || path);
@@ -151,6 +169,9 @@ export const useMultipleTabStore = defineStore({
         curTab.params = params || curTab.params;
         curTab.query = query || curTab.query;
         curTab.fullPath = fullPath || curTab.fullPath;
+        /**
+         * Splice()方法通过移除或替换现有元素和/或就地添加新元素来更改数组的内容。
+         */
         this.tabList.splice(updateIndex, 1, curTab);
       } else {
         // Add tab
@@ -171,6 +192,7 @@ export const useMultipleTabStore = defineStore({
         this.tabList.push(route);
       }
       this.updateCacheTab();
+
       cacheTab && Persistent.setLocal(MULTIPLE_TABS_KEY, this.tabList);
     },
 

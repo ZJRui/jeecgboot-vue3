@@ -6,7 +6,7 @@ import { t } from '/@/hooks/web/useI18n';
 const dashboard: AppRouteModule = {
   path: '/dashboard',
   name: 'Dashboard',
-  component: LAYOUT,
+  component: LAYOUT,//除了 layout 对应的 path 前面需要加 /，其余子路由都不要以/开头
   redirect: '/dashboard/analysis',
   meta: {
     orderNo: 10,

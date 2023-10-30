@@ -1,8 +1,17 @@
 import { ThemeEnum } from '../enums/appEnum';
 
 /**
- * css 前缀设置:用于修改项目内组件 class 的统一前缀
+ * 1.css 前缀设置:用于修改项目内组件 class 的统一前缀
  * https://doc.vvbin.cn/guide/settings.html#%E4%B8%BB%E9%A2%98%E8%89%B2%E9%85%8D%E7%BD%AE
+ *
+ * 2.这个设置是怎么起到作用的呢？
+ * 首先在ts中，这个下面的prefixCls属性会被provide到子组件中，子组件inject后 子组件会使用prefixCls生成一个自己的prefixCls属性，
+ * 比如叫做 prefixcls-abc,然后在子组件的class中使用  :class="prefixCls"
+ *
+ * 其次在less中，index.less文件中 定义了一个 namespace变量： @namespace: jeecg.
+ * 子组件中style中的 会使用这个namespace变量 构建一个自己的变量名称，比如叫做 @prefix-cls: ~'@{namespace}-abc';
+ * .@{prefix-cls} {}就会匹配上ts的类名了。
+ *
  *
  */
 export const prefixCls = 'jeecg';

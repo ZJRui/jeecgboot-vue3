@@ -2,7 +2,7 @@ import { AppRouteModule } from '/@/router/types';
 import { LAYOUT } from '@/router/constant';
 
 /**
- *菜单是根据路由生成的，路由模式又分为
+ *1.菜单是根据路由生成的，路由模式又分为
  *   // 权限模式,默认前端角色权限模式
  *   // ROUTE_MAPPING: 前端模式（菜单由路由生成，默认）
  *   // ROLE：前端模式（菜单路由分开）
@@ -11,6 +11,10 @@ import { LAYOUT } from '@/router/constant';
  *
  * 默认情况下，使用后端模式，也就是从后端接口获取路由，然后根据路由生成菜单，因此这里配置了路由 也不会有对应的菜单。
  *
+ *
+ * 2.除了 layout 对应的 path 前面需要加 /，其余子路由都不要以/开头
+ *
+ * 3. 所有的多级路由最终都会转成二级路由，所以不能内嵌子路由
  */
 
 const productRoutes: AppRouteModule = {
@@ -41,7 +45,7 @@ const productRoutes: AppRouteModule = {
       },
       children: [
         {
-          path: 'innerRouteA',
+          path: 'innerRouteA',//所有的多级路由最终都会转成二级路由，所以不能内嵌子路由
           name: 'innerRouteA',
           meta: {
             title: '内部三级路由A',

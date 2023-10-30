@@ -27,6 +27,21 @@ let tmp={
     },
 }
 
-let tmp2={
-    api: "abc" as number
+
+interface Samsung{
+    error?:(p1:string, p2:number , p3:()=>number)=>any
 }
+
+let boolVar:boolean=false;
+let samsung:Samsung={
+    error:boolVar?()=>{}:(p1,p2,p3)=>{
+        console.log(p1);
+        console.log(p2);
+        console.log(p3);
+    }
+
+}
+
+
+
+

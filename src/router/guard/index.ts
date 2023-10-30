@@ -39,7 +39,9 @@ function createPageGuard(router: Router) {
   router.beforeEach(async (to) => {
     // The page has already been loaded, it will be faster to open it again, you don’t need to do loading and other processing
     to.meta.loaded = !!loadedPageMap.get(to.path);
-    // Notify routing changes
+    /**
+     * 自定义emit触发通知发布路由变化的事件--》  tabs/inde.vue
+     */
     setRouteChange(to);
 
     return true;

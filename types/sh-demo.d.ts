@@ -55,15 +55,123 @@ export class Person {
 }
 
 export interface PersonInterface {
-  //存在一个方法接收 两个参数 返回一个Person对象
-  (name: string, age: number): Person;
 
-  //返回值 PersonNotExistClass 类型并没有定义，这里也没有报错
-  (name: string, age: string): PersonNotExistClass;
+  /**
+   * 接口属性签名
+   */
+  x?:number;
+  y?:number;
+
+
+  //方法签名： 存在一个方法接收 两个参数 返回一个Person对象
+  funA (name: string, age: number): Person;
+
+  /**
+   * 1.方法签名
+   *
+   * 2. 返回值 PersonNotExistClass 类型并没有定义，这里也没有报错 ，为什么？
+   * 在 TypeScript 的声明文件（`.d.ts` 文件）中，你可以声明接口、类型、函数、类等，而无需实际的实现或引入其他文件。这
+   *  是因为声明文件主要用于描述类型结构，而不关心具体的实现。当你在声明文件中定义了 `PersonInterface` 接口，并没有具体
+   *  的实现，也没有引入 `PersonNotExistClass`，TypeScript 编译器并不会强制要求你提供具体的实现或引入相关的类。
+   *
+   * 声明文件的目的是为了在开发过程中提供类型信息，使得 TypeScript 编译器和开发工具能够提供更好的类型检查和代码提示
+   * ，而不是用于运行时。在实际的代码中，你需要确保在使用 `PersonInterface` 的地方，提供了符合该接口定义的实现。
+   *
+   * 如果在实际代码中使用了 `PersonInterface`，而没有提供符合该接口定义的实现，那么在类型检查阶段可能会出现错误。但在声明
+   * 文件中本身，并不会因为没有提供具体实现或引入相关类而报错。这种设计使得声明文件可以独立于实现存在，方便在不同的项目中共享类型信息。
+   *
+   * 也就是说，在这里声明不会提示错误，也不需要导入。但是当你在其他ts文件中 使用 PersonInterface这个接口的时候
+   * let testA:PersonInterface={
+   *   funA:(name, age)=>{
+   *     return {
+   *       name:name,
+   *       age:age
+   *     }
+   *   },
+   *   funB(name: string, age: string): PersonNotExistClass {//报错提示找不到 PersonNotExistClass
+   *   }
+   * }
+   *
+   * 3.  funB?():void 表示funB是可选方法
+   *
+   * 4. 注意区分ts的调用签名和方法签名
+   *
+   *
+   * @param name
+   * @param age
+   */
+  funB(name: string, age: string): PersonNotExistClass;
 }
+
+/**
+ * 定义一个调用签名， 这里声明了一个调用签名，调用签名是 可被调用的，也就是当作函数来执行
+ *
+ */
+declare let addDemoTest:(x:number,y:number)=>number;
+addDemoTest(1,2);
+/**
+ * 外部模块提供具体的实现
+ * addDemoTest=(x,y)=>{
+ *   return x+y;
+ * }
+ */
+
+
+//接口中定义调用签名
+interface AInter{
+    (x:number,y:number):number;
+}
+let aInter:AInter;
+//将调用签名作为函数使用
+aInter(1,2);
+interface BInter{
+  add:(x:number,y:number)=>number;
+  toStr(obj:object):string;
+}
+//多个调用签名的使用
+let bInter:BInter;
+bInter.add(1,3)
+bInter.toStr({name:"sachin"})
+//接口中同时定义调用签名和方法签名
+interface CInter{
+  (x:number,y:number):number;
+  add(x:number,y:number):number;
+  toStr(obj:object):string;
+}
+let cInter:CInter;
+cInter(1,2);
+cInter.add(1,2);
+
+
+
+
+declare function funDemoA():XXNOtExit;
+declare interface YInter{
+  //方法签名
+  afun(name:string):OXNotExitType
+  //调用签名
+  bFun:(x:number,y:number)=>PPPNotExitType;
+  //调用签名
+  (x:number,y:string):MMMNotExitType;
+  //属性
+  uofw:PropNotExitType;
+}
+
 
 export type Address = string | Array<string>;
 
 declare const mainPerson: Person;
 
 export default mainPerson;
+
+// declare namespace  JONSUtils{
+//   /**
+//    * 默认情况下，在命名空间内部的声明只允许在该命名空间内部使用，在命名空间之外访问命名空间内部的声明会产生错误。
+//    * @param object
+//    */
+//   function parseToStr(object:object):string;
+//
+//   /**
+//    * 导出命名空间中的
+//    */
+// }

@@ -1,7 +1,7 @@
 /**
  * 针对类型的导入到处语法
  */
-import type { UserConfig, ConfigEnv,defineConfig } from 'vite';
+import type { UserConfig, ConfigEnv } from 'vite';
 import pkg from './package.json';
 import dayjs from 'dayjs';
 
@@ -134,12 +134,37 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       //清除全局的console.log和debug
       drop: isBuild ? ['console', 'debugger'] : [],
     },
+    /**
+     * 1.关于define:
+     */
     define: {
       // setting vue-i18-next
       // Suppress warning
       __INTLIFY_PROD_DEVTOOLS__: false,
-      //question: 这里的__app_info 和global.d.ts中的__APP_INFO__有什么区别？
+      /**
+       * question: 这里的__app_info 和global.d.ts中的__APP_INFO__有什么区别？
+       * 我们想要做的目的是 用vite声明一个全局变量。这个全局变量就是这里的__APP__INFO__对象。
+       * 首先__APP_INFO__这个对象是vite 这个NodeJS进程创建的对象。
+       * 在这里我们通过vite的配置对象的define属性来 声明全局变量， 这个全局变量的名称就是下面的key __APP__INFO
+       * 这个全局变量的值就是JSON.stringify(__APP_INFO__)
+       * 声明了全局变量之后如何使用这个全局变量呢？ 这涉及define的工作原理，这里的变量会被挂载到全局对象window上。
+       * 所以我们可以直接用window.__APP_INFO__来访问
+       *
+       * 但是在ts中 window并没有__app__INfo__属性，所以直接书写window.__APP_INFO__会报红，那么我们可以在declare global中声明全局会存在一个
+       * __APP__INFO_变量。
+       *
+       *
+       */
       __APP_INFO__: JSON.stringify(__APP_INFO__),
+      /**
+       *1.自定义个测试变量,如何访问呢？全局对象 windows.Sachin_demo_test
+       * E:\programme\Vite\博文\第四十章-Vite配置-define - Fidel Yiu I 前端技术博客.pdf
+       *
+       * 2.直接访问window.Sachin_Demo_Test会报红提示window没有这个属性，可以在declare global中声明.
+       * 又或者你直接在declare global中声明一个全局 变量Sachin_Demo_Test，然后项目中就可以直接使用了，这样项目ts会认为存在全局变量。
+       * 实际上在window对象上确实存在Sachin_Demo_Test属性。两种方式的区别一个声明在window上有属性，一个声明是在全局有属性
+       */
+      Sachin_Demo_Test: JSON.stringify('Sachin_Demo_Test'),
     },
     css: {
       preprocessorOptions: {

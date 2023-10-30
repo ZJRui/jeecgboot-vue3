@@ -7,6 +7,8 @@ declare global {
   /**
    * question: 1.declare const varName:string 是外部变量声明，不允许定义初始值。
    *  但是下面的 没有使用declare，为什么他没有设置初始值？
+   *
+   *
    */
   const __APP_INFO__: {
     pkg: {
@@ -21,6 +23,14 @@ declare global {
   //   // Global vue app instance
   //   __APP__: App<Element>;
   // }
+
+  declare interface Window {
+    /**
+     * 1.在index.html中设置了 window._CONFIG = {};
+     * 2.在hooks/setting/index.ts中设置了 window._CONFIG['domianURL'] = VITE_GLOB_DOMAIN_URL;
+     */
+    _CONFIG: Record<string,any>;
+  }
 
   // vue
   declare type PropType<T> = VuePropType<T>;

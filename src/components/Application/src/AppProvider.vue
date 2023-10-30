@@ -32,9 +32,18 @@
         handleRestoreState();
       });
 
-      const { prefixCls } = toRefs(props);
+      const { prefixCls } = toRefs(props);//prefixCls=jeecg
 
-      // Inject variables into the global
+      /**
+       * 1. Inject variables into the global
+       *
+       *
+       * 3.App.vue中在使用 <AppProvider>标签的时候没有 传递props参数， Props属性是在AppProvider组件定义的时候设置了默认的props值。
+       * 其中就有prefixCls 这个属性的，他的默认值是 designSetting.ts中定义的prefixCls=jeecg。
+       * 下面的变量prefixCls就是从props中解构的
+       *
+       */
+
       createAppProviderContext({ prefixCls, isMobile });
 
       /**

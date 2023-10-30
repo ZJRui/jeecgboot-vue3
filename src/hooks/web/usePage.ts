@@ -14,7 +14,10 @@ function handleError(e: Error) {
   console.error(e);
 }
 
-// page switch
+/**
+ * 页面跳转建议采用项目提供的
+ * @param _router
+ */
 export function useGo(_router?: Router) {
   // update-begin--author:liaozhiyang---date:20230908---for：【issues/694】404返回首页问题
   const userStore = useUserStore();
@@ -40,7 +43,7 @@ export function useGo(_router?: Router) {
 }
 
 /**
- * @description: redo current page
+ * @description: redo current page 路由刷新
  */
 export const useRedo = (_router?: Router) => {
   const { push, currentRoute } = _router || useRouter();

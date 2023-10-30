@@ -18,9 +18,55 @@
 
  3.官方文档： https://doc.vvbin.cn/guide/settings.html#%E6%A0%B7%E5%BC%8F%E9%85%8D%E7%BD%AE
 
- */
+ 4. 下面是一段 Less 代码，其中定义了一个变量 @name，变量的值为 xkd_top，使用时需要将这个变量 @name 使用花括号包起来：
+         @name: xkd_top; //变量的值没有使用引号括起来
+        .div_@{name} {
+            padding: 10px;
+        }
+6，前缀使用
+在 css 内:
+ namespace已经全局注入，不需要额外在引入
+ @prefix-cls: ~'@{namespace}-app-logo';//注意这里进行了转义
+  .@{prefix-cls} {
+      width: 100%;
+   }
+ 在 vue/ts 内:
+ import { useDesign } from '/@/hooks/web/useDesign';
+ const { prefixCls } = useDesign('app-logo');
+ // prefixCls => vben-app-logo
+
+7,less中变量定义和转义 Less中的变量定义 和转义，变量的值要不要用引号？
+
+  https://www.yuque.com/wuqimaheihuitailang/tpsxks/xz3cc0q03xg2iw94
+*/
 
 @namespace: jeecg;
+
+// 不对变量的 值 字符串 进行转义
+@prefix-cls-a: '@{namespace}-app-log-test-a';
+@{prefix-cls-a}{
+  color:red
+}
+//输出的css如下
+//字符串形式的选择器不是一个合法的选择器
+//'jeecg-app-log-test-a' {
+//  color: red;
+//}
+//在CSS中，'jeecg-app-log-test-a' 不是一个合法的选择器。合法的CSS选择器可以是标签选择器（如div、span等）、
+// 类选择器（如.classname）、ID选择器（如#idname）、通配符选择器（*）、属性选择器（如[attribute=value]）等。
+// 字符串形式的选择器（带有引号）在CSS中通常不会被识别为有效的选择器。
+
+// 对变量的值 字符串 进行转义
+@prefix-cls-b:~'@{namespace}-app-log-test-b';
+@{prefix-cls-b}{
+  color:red;
+}
+//输出css如下
+jeecg-app-log-b {
+  colore: red;
+}
+
+
 
 // tabs
 // updateBy:sunjianlei---updateDate:2021-09-03---修改tab切换栏样式：更改高度

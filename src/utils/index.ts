@@ -111,7 +111,8 @@ export function cloneObject(obj) {
  * question: 这个方法是干嘛的？ 一般是先import vue得到一个Vue组件对象之后 wihtInstall(vueComponent)
  * 这个方法内部给component设置了install属性方法。这个属性install是干嘛的？组件自身就带有install属性吗？哪里定义的？什么时候执行的？
  *
- * 1.app.use()方法的参数接收一个 Plugin对象参数，Plugin对象是一个 install属性的对象，install属性的类型是 install: PluginInstallFunction<Options>;
+ * 1.app.use()方法的参数接收一个 Plugin对象参数，Plugin对象是一个 install属性的对象，install属性的
+ * 类型是 install: PluginInstallFunction<Options>;
  * PluginInstallFunction这个类型中是函数类型的别名： (app: App, ...options: Options) => any  因此install属性就是一个函数
  * 2.因此install的执行是 通过app.use(vueComponent)将组件对象作为插件传入触发的，在registerGlobComp方法中大量使用了use方法
  *

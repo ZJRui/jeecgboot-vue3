@@ -83,6 +83,9 @@ export default function mitt(all?: EventHandlerMap): Emitter {
      * @memberOf mitt
      */
     emit<T = any>(type: EventType, evt: T) {
+      /**
+       * 对每一个handler执行该handler
+       */
       ((all?.get(type) || []) as EventHandlerList).slice().map((handler) => {
         handler(evt);
       });

@@ -37,7 +37,12 @@ function findMenuPath<T = Recordable>(treeData: T[], path: string, matchHide: bo
   }) as Menu[];
 }
 
-// 路径处理
+/**
+ * 路径处理
+ * https://jeesite.com/front/vben-admin/docs/guide/router.html#%E5%A4%9A%E7%BA%A7%E8%B7%AF%E7%94%B1
+ * @param menus
+ * @param parentPath
+ */
 function joinParentPath(menus: Menu[], parentPath = '') {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index];
@@ -52,6 +57,10 @@ function joinParentPath(menus: Menu[], parentPath = '') {
       menu.path = `${parentPath}/${menu.path}`;
     }
     if (menu?.children?.length) {
+      /**
+       * hidePathForChildren=true ：表示当前menu的path在构建子菜单的path时被忽略，也就是使用当前菜单的parentPath+children.path来构建
+       * 子菜单的path.
+       */
       joinParentPath(menu.children, menu.meta?.hidePathForChildren ? parentPath : menu.path);
     }
   }

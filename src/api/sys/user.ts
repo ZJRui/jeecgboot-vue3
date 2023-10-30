@@ -91,6 +91,7 @@ export function getUserInfo() {
   });
 }
 
+// 从后台获取当前用户拥有的编码
 export function getPermCode() {
   return defHttp.get({ url: Api.GetPermCode });
 }

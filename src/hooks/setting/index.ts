@@ -34,6 +34,9 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
     uploadUrl: VITE_GLOB_DOMAIN_URL,
     viewUrl: VITE_GLOB_ONLINE_VIEW_URL,
   };
+  /**
+   * index.html文件中设置了 window._CONFIG = {};因此这里可以使用_config对象
+   */
   window._CONFIG['domianURL'] = VITE_GLOB_DOMAIN_URL;
   return glob as Readonly<GlobConfig>;
 };

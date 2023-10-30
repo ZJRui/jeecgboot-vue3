@@ -23,7 +23,12 @@ export function configMockPlugin(isBuild: boolean) {
     mockPath: 'mock',
     localEnabled: !isBuild,
     prodEnabled: isBuild,
-    // 这样可以控制关闭mock的时候不让mock打包到最终代码内
+    /**
+     * 为什么通过插件注入代码而不是直接在 main.ts 内插入
+     *
+     * 在插件内通过 injectCode 插入代码，方便控制 mockjs 是否被打包到最终代码内。如果在 main.t
+     * s 内判断，如果关闭了 mock 功能，mockjs 也会打包到构建文件内，这样会增加打包体积
+     */
     injectCode: `
       import { setupProdMockServer } from '../mock/_createProductionServer';
 

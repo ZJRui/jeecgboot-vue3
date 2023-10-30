@@ -8,6 +8,11 @@ import { getRawRoute } from '/@/utils';
 
 const emitter = mitt();
 
+/**
+ * key表示一个事件类型。在这里就是路由变化的事件。
+ *
+ *
+ */
 const key = Symbol();
 
 let lastChangeTab: RouteLocationNormalized;

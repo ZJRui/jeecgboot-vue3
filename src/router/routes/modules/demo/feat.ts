@@ -136,17 +136,17 @@ const feat: AppRouteModule = {
       meta: {
         title: t('routes.demo.feat.tab'),
         carryParam: true,
-        hidePathForChildren: true,
+        hidePathForChildren: true,//  本级path将会在子级菜单中合成完整path时会忽略这一层级
       },
       children: [
         {
-          path: 'testTab/id1',
+          path: 'testTab/id1',  // 其上级有标记hidePathForChildren，所以本级在生成菜单时最终的path为  /feat/testTab/id1
           name: 'TestTab1',
           component: () => import('/@/views/demo/feat/tab-params/index.vue'),
           meta: {
             title: t('routes.demo.feat.tab1'),
             carryParam: true,
-            ignoreRoute: true,
+            ignoreRoute: true,// 本路由仅用于菜单生成，不会在实际的路由表中出现,也就是不会被addRoute
           },
         },
         {

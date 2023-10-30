@@ -1,5 +1,8 @@
 // 用于配置某些组件的常规配置，而无需修改组件
 
+/**
+ * Table/index.ts  从其他模块导入后 又整体导出或部分道出了一些类型
+ */
 import type { SorterResult } from '../components/Table';
 
 export default {
