@@ -5,6 +5,9 @@ import vue from '@vitejs/plugin-vue';
  */
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import legacy from '@vitejs/plugin-legacy';
+/**
+ * Iconify 图标支持
+ */
 import purgeIcons from 'vite-plugin-purge-icons';
 import UnoCSS from 'unocss/vite';
 import { presetTypography, presetUno } from 'unocss';

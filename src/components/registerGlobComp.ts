@@ -7,7 +7,7 @@ import Editor from '/@/components/Tinymce/src/Editor.vue';
 
 import {
   // Need
-  Button as AntButton,
+  Button as AntButton,//ant原生的Button 重新起个名字叫做AntButton,项目中使用给自己实现的Button，该Button中引用了Ant的Button
   Select,
   Alert,
   Checkbox,
@@ -67,6 +67,10 @@ if (import.meta.env.DEV) {
 console.log('---初始化---， 全局注册仪表盘--------------');
 
 export function registerGlobComp(app: App) {
+  /**
+   *
+   *
+   */
   compList.forEach((comp) => {
     app.component(comp.name || comp.displayName, comp);
   });
@@ -74,11 +78,28 @@ export function registerGlobComp(app: App) {
   app.component(Editor.name, Editor);
 
   /**
-   * 1.为什么要use? 因为官网的示例导入就是
+   * 1.vue3中注册组件是使用 app.component(name,component) 注册组件，如果同时传递一个组件名字符串及其定义，则注册一个全局组件；
+   * 如果只传递一个名字，则会返回用该名字注册的组件 (如果存在的话)。
+   *
+   * 而app.use 是安装一个插件。第一个参数应是插件本身，可选的第二个参数是要传递给插件的选项。插件可以是一个带 install() 方法的对象，
+   * 亦或直接是一个将被用作 install() 方法的函数。插件选项 (app.use() 的第二个参数) 将会传递给插件的 install() 方法。
+   *
+   * 为什么下面的注册组件要使用use方法来注册组件？ 既然组件被作为插件使用，那么ant的组件是哪里定义的插件install方法
+   *
+   * 2.为什么要use? 因为官网的示例导入就是
    * import { DatePicker } from 'ant-design-vue';
    * app.use(DatePicker);
+   * use(Button):  会自动注册 Button 下的子组件, 例如 Button.Group *
+   * 以Select组件为例子：node_modules/.pnpm/ant-design-vue@3.2.20_vue@3.3.4/node_modules/ant-design-vue/lib/select/index.js
+   * Select.install = function (app) {
+   *   //注册Select组件自身和其子组件
+   *   app.component(Select.name, Select);
+   *   app.component(Select.Option.displayName, Select.Option);
+   *   app.component(Select.OptGroup.displayName, Select.OptGroup);
+   *   return app;
+   * };
    *
-   * 2.use(Button):  会自动注册 Button 下的子组件, 例如 Button.Group *
+   *
    */
   app
     .use(Select)

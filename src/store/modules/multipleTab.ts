@@ -72,7 +72,14 @@ export const useMultipleTabStore = defineStore({
 
       for (const tab of this.tabList) {
         const item = getRawRoute(tab);
-        // Ignore the cache
+        /**
+         * Ignore the cache
+         * 1.back后台模式下，菜单默认都是不开启缓存的，也就是ignoreKeepAlive为true，
+         * 2.前端模式下 routes/module下的路由 有些路由配置了ignoreKeepAlive=false
+         * 但是有些路由没有配置ignoreKeepAlive属性，此时ignoreKeepAlive的值为undefined，
+         * 对 undefined取反就是true，因此needCache为true
+         *
+         */
         const needCache = !item.meta?.ignoreKeepAlive;
         if (!needCache) {
           continue;

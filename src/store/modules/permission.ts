@@ -258,6 +258,9 @@ export const usePermissionStore = defineStore({
        */
       switch (permissionMode) {
         case PermissionModeEnum.ROLE:
+          /**
+           * 这里的asyncRoutes 是加载了route/modules下的路由配置
+           */
           routes = filter(asyncRoutes, routeFilter);
           routes = routes.filter(routeFilter);
           //  将多级路由转换为二级
@@ -265,6 +268,9 @@ export const usePermissionStore = defineStore({
           break;
 
         case PermissionModeEnum.ROUTE_MAPPING:
+          /**
+           * 这里的asyncRoutes 是加载了route/modules下的路由配置
+           */
           routes = filter(asyncRoutes, routeFilter);
           routes = routes.filter(routeFilter);
           const menuList = transformRouteToMenu(routes, true);
@@ -295,6 +301,7 @@ export const usePermissionStore = defineStore({
           try {
             this.changePermissionCode();
             /**
+             * back模式下没有读取/routes/module下的路由信息
              * 获取菜单树
              * [
              *   {

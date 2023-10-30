@@ -49,7 +49,14 @@
   import keepalivecomp from '@/views/demo/sachin/jvxetabledemo/keepalivecomp.vue';
   import ShBasicTable from '@/components/Table/src/ShBasicTable.vue';
   import ComponentA from '@/views/demo/sachin/jvxetabledemo/ComponentA.vue';
-  import { ref } from 'vue';
+  import { ref,onUnmounted,onMounted,onDeactivated,onActivated,onUpdated } from 'vue';
+
+  /**
+   * 该组件的菜单已经开启了缓存。 要想缓存生效，组件的name需要和组件被访问的url匹配。
+   */
+  defineOptions({
+    name:"comp-sachindemo-jvextable"
+  })
 
   const columns = [
     {
@@ -110,5 +117,18 @@
     name: 'sachin',
     age: 18,
     address: 'shanghai',
+  });
+
+  onMounted(() => {
+    console.log('jvxetabledemo/index.vue mounted');
+  });
+  onUnmounted(() => {
+    console.log('jvxetabledemo/index.vue unmounted');
+  });
+  onDeactivated(() => {
+    console.log('jvxetabledemo/index.vue deactivated');
+  });
+  onActivated(() => {
+    console.log('jvxetabledemo/index.vue activated');
   });
 </script>

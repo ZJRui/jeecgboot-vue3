@@ -1,6 +1,8 @@
 
 /**
-config.less 这个文件会被全局注入到所有文件，所以在页面内可以直接使用变量而不需要手动引入
+1.config.less 这个文件会被全局注入到所有文件，所以在页面内可以直接使用变量而不需要手动引入
+2.如何被注入的？ 在vite.config.ts文件中使用了 vite的css.preprocessorOptions选项,针对less做了配置。
+less.modifyVars=generateModifyVars() ,这个方法中会加载这里的config.less
  */
 @import (reference) 'color.less';
 @import (reference) 'var/index.less';

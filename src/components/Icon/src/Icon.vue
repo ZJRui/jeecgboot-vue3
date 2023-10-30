@@ -10,6 +10,9 @@
   import { isString } from '/@/utils/is';
   import { propTypes } from '/@/utils/propTypes';
 
+  /**
+   * 1. 以 ｜svg 结尾会自动使用SvgIcon组件   <Icon name="test|svg" /> 注意这里使用的是Icon组件
+   */
   const SVG_END_WITH_FLAG = '|svg';
   export default defineComponent({
     name: 'Icon',

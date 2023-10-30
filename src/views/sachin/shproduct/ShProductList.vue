@@ -1,6 +1,9 @@
 <template>
   <div>this is ShProductList.vuew
-
+    <div>
+      <SvgIcon name="test" />
+      <StepBackwardOutlined />
+    </div>
     <basic-table @register="registerTable"></basic-table>
   </div>
 </template>
@@ -14,6 +17,9 @@ import BasicTable from "@/components/Table/src/BasicTable.vue";
 import {BasicColumn, useTable} from "@/components/Table";
 import {useRoute} from "vue-router";
 import {PersonInterface} from "#/sh-demo";
+import { SvgIcon } from '/@/components/Icon';
+import {StepBackwardOutlined} from "@ant-design/icons-vue";
+
 defineOptions({
   //设置组件的名称，匹配路由名称，以便缓存改组件
   name:"innerRouteA"

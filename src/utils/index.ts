@@ -114,7 +114,10 @@ export function cloneObject(obj) {
  * 1.app.use()方法的参数接收一个 Plugin对象参数，Plugin对象是一个 install属性的对象，install属性的
  * 类型是 install: PluginInstallFunction<Options>;
  * PluginInstallFunction这个类型中是函数类型的别名： (app: App, ...options: Options) => any  因此install属性就是一个函数
+ *
  * 2.因此install的执行是 通过app.use(vueComponent)将组件对象作为插件传入触发的，在registerGlobComp方法中大量使用了use方法
+ * app.use--->执行插件的install方法---》执行app.component ,
+ * vue3中通过app.component方法来全局注册组件。
  *
  * @param component
  * @param alias

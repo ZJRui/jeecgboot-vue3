@@ -167,8 +167,22 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       Sachin_Demo_Test: JSON.stringify('Sachin_Demo_Test'),
     },
     css: {
+      /**
+       * vite的css.preprocessorOptions:指定传递给  CSS  预处理器的选项。文件扩展名用作选项的键。每个预处
+       * 理器支持的选项可以在它们各自的文档中找到.
+       */
       preprocessorOptions: {
         less: {
+          /**
+           * 1.启用 Less 变量的运行时修改。当使用新值调用时，Less  文件将重新编译而无需重新加载。简单的基本用法：
+           * less.modifyVars({
+           *     '@primary-color': '#1DA57A',
+           * })
+           * 2.Modify  Variables  修改变量 : lessc  --modify-var="color1=red"  {  modifyVars:  {  color1:  'red'  }  }
+           * 与全局变量选项相反，这会将声明放在基本文件的末尾，这意味着它将覆盖  Less  文件中定义的任何内容。
+           *
+           * 3.less-loader 是一个 Webpack 的加载器，用于将 Less 转化为 CSS。而 modifyVars 是 Less 中的一个功能，允许开发者在运行时修改 Less 变量的值。
+           */
           modifyVars: generateModifyVars(),
           javascriptEnabled: true,
         },

@@ -1,6 +1,12 @@
 <template>
   <ConfigProvider :locale="getAntdLocale">
     <AppProvider>
+      <!--
+      1.这里的routerview大部分情况下都会路由到Layout组件    export const LAYOUT = () => import('/@/layouts/default/index.vue');
+        组件名称name=DefaultLayout。 在DefaultLayout中引入 <LayoutHeader  />、<LayoutSideBar> <LayoutContent />--》
+         在LayoutContent中引入 <PageLayout />
+         PageLayout中引入RouterView，该routerView控制 页面中心区域的显示内容。
+      -->
       <RouterView />
     </AppProvider>
   </ConfigProvider>
@@ -14,6 +20,10 @@
 
   // 解决日期时间国际化问题
   import 'dayjs/locale/zh-cn';
+  import LayoutContent from "@/layouts/default/content/index.vue";
+  import PageLayout from "@/layouts/page/index.vue";
+  import LayoutHeader from "@/layouts/default/header/index.vue";
+  import LayoutSideBar from "@/layouts/default/sider/index.vue";
   // support Multi-language
   const { getAntdLocale } = useLocale();
 

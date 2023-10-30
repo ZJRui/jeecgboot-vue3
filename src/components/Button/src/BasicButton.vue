@@ -23,6 +23,12 @@
   import Icon from '/@/components/Icon/src/Icon.vue';
   import { buttonProps } from './props';
   import { useAttrs } from '/@/hooks/core/useAttrs';
+
+  /**
+   *
+   * 该vue文件中 使用到的属性 onClick, preIcon iconSize 都是通过下面的defineProps定义在了Props中
+   *
+   */
   const props = defineProps(buttonProps);
   // get component class
   const attrs = useAttrs({ excludeDefaultKeys: false });

@@ -40,6 +40,31 @@
      中include属性的值完全一致，包括大小写格式。
      因为vue文档要求include属性为 需要被缓存的组件的名称。而我们的项目在计算include数组的时候 使用的是路由的name作为include数组的值。
      因此我们要求路由的name属性和组件的name属性必须一致。
+
+  7.为什么嵌套路由要转为二级路由？
+     当permissionMode=ROUTE_MAPPING的时候，会加载项目的routes/module下配置的路由信息，每个ts文件中可以配置嵌套路由，子路由有自己的name名称，
+     子路由通过component属性指定对应的组件。 当访问到这个路由的时候， 假设当前为/pageA,toRoute=/pageB,在进入pageB之前会将pageB的路由信息保存到Set中。
+     当pageB离开的时候，会通过getCache返回的要缓存的组件信息来决定 要不要销毁pageB对应的组件。route_mapping模式下，getCache会返回路由的name属性作为
+     要缓存组件的组件名称。 因此这个时候要求路由的name属性和组件的name属性必须一致。
+
+     当使用后台back模式的时候，路由信息全部来自 后端接口返回的菜单信息，我们需要在菜单管理中配置 访问url， 前端组件（vue文件路径），不会使用routes/module本地
+     项目配置的路由信息。
+     对于菜单配置新系生成路由信息，我们会将访问url 替换/为-作为路由的name，如果对应的组件需要被缓存，那么就要求 vue组件需要使用该路径作为name属性。
+     比如：部门管理的菜单配置的url为：/system/depart，那么对应的路由的name为system-depart，对应的组
+     件的name属性也要为system-depart。<script lang="ts" setup name="system-depart">或者defineOptions({name: 'system-depart'})
+     接口返回的菜单信息是一个嵌套层次树形解构的， 一个菜单可以有子菜单，子菜单的访问url 可以是以/开头，也可以是不以/开头，不以/开头的情况下表示会拼接
+     父菜单的url
+
+     根据菜单构建路由，我们想用每一个菜单的完整路径url作为路由的name。菜单有了完整的访问url，一个菜单对应一个组件，从逻辑上将，每一个菜单都是一个一级路由
+     在实现上还是会有一点变化就是，他们没有变成一级路由，而是都变成了二级路由。
+     假设a.ts中 配置了一个路由对象，path=/a, children=[{path: 'a-1'},{path: 'a-2'}]，三个路由都变成独立的路由，path分别为/a,/a/a-1,/a/a-2
+     b.ts中 配置了一个路由对象，path=/b, children=[{path: 'b-1'},{path: 'b-2'}]，三个路由都变成独立的路由，path分别为/b,/b/b-1,/b/b-2
+     我们分别为a.ts和b.ts创建一个路由对象，叫做他们的父路由对象， 而a.ts的所有路由都变成parentRoute的子路由，parentRoute的path为空，所以parent路由
+     不影响子路由的路径。因此所有的路由都变成了二级路由。 每一路由都有完整的路径url，我们将path中的/替换为- 作为路由的name，
+
+     除此之外后台模式下 配置菜单的时候菜单有一个选项控制是否针对该菜单开启缓存。 另外就是组件开启缓存后不会再次执行onMounted，所以onMounted
+     中加载数据只会加载一次。
+
     -->
     <template #default="{ Component, route }">
       <!--      <transition-->

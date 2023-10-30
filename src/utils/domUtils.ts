@@ -126,6 +126,22 @@ export function hackCss(attr: string, value: string) {
   prefix.forEach((item) => {
     styleObj[`${item}${upperFirst(attr)}`] = value;
   });
+  /**
+   * 下面的attr是什么意思？
+   * [attr] 是 JavaScript 中的计算属性名（Computed Property Name）语法。它允许你在对象字面量中使用变量作为属性名。
+   * 在这个方法中，attr 是一个字符串参数，代表 CSS 样式属性（例如 'color', 'fontSize' 等）。通过使用计算属性名语法，可
+   * 以将 attr 参数的值作为对象的属性名，并将 value 参数的值作为对应属性的值。这样，返回
+   * 的对象将包含一个动态的属性，其属性名由 attr 决定，属性值由 value 决定。
+   * 例如，如果你调用 hackCss('color', 'red')，则返回的对象会是：
+   * {
+   *   webkitColor: 'red',
+   *   MozColor: 'red',
+   *   msColor: 'red',
+   *   OTColor: 'red',
+   *   color: 'red'
+   * }
+   * 在这个对象中，[attr] 的使用允许你动态地为不同的 CSS 属性创建对应的前缀属性。这种灵活性通常在需要处理浏览器前缀兼容性时非常有用。
+   */
   return {
     ...styleObj,
     [attr]: value,

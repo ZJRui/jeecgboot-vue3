@@ -8,6 +8,9 @@
   import { defineComponent, computed } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
 
+  /**
+   * 1. 以 ｜svg 结尾会自动使用SvgIcon组件   <Icon name="test|svg" /> 注意这里使用的是Icon组件
+   */
   export default defineComponent({
     name: 'SvgIcon',
     props: {
